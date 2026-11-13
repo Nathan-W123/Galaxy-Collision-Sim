@@ -45,3 +45,26 @@ def test_disk_rotates_about_spin_axis():
             th, ph = np.radians(45.0), np.radians(30.0)
             axis = np.array([np.sin(th) * np.cos(ph), np.sin(th) * np.sin(ph), np.cos(th)])
         assert np.dot(L, axis) > 0.999
+
+
+def test_halo_velocities_match_jeans_equation():
+    """Sampled isotropic dispersion matches sigma^2 = (1/rho) int_r^inf rho G M(<r')/r'^2 dr'."""
+    from nbody.ics import hernquist_rho, sample_hernquist_positions, sample_isotropic_velocities
+    cfg = {"halo": {"mass": 50.0, "scale_radius": 20.0, "r_max": 300.0, "n": 60000},
+           "bulge": {"mass": 1.0, "scale_radius": 0.6, "r_max": 10.0, "n": 0},
+           "disk": {"mass": 4.0, "scale_length": 3.0, "scale_height": 0.3, "n": 0}}
+    m = GalaxyModel(cfg, G)
+    df = EddingtonDF(m, m.halo)
+    rng = np.random.default_rng(1)
+    _, r = sample_hernquist_positions(rng, m.halo)
+    v = sample_isotropic_velocities(rng, m, df, r)
+    rg = np.geomspace(1e-3, 3e4, 20000)
+    rho = hernquist_rho(rg, m.halo.M_total, 20.0)
+    g = G * m.menc(rg) / rg ** 2
+    for lo, hi in [(1, 3), (5, 10), (10, 20), (30, 60), (80, 150)]:
+        sel = (r > lo) & (r < hi)
+        rc = np.sqrt(lo * hi)
+        msk = rg >= rc
+        s2 = np.trapezoid(rho[msk] * g[msk], rg[msk]) / np.interp(rc, rg, rho)
+        s1 = np.sqrt(np.sum(v[sel] ** 2, axis=1).mean() / 3)
+        assert abs(s1 / np.sqrt(s2) - 1) < 0.03

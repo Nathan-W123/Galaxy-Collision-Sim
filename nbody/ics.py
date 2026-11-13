@@ -15,7 +15,7 @@ Velocities
 ----------
 * Halo and bulge: isotropic distribution functions from Eddington's formula, computed
   numerically for each component in the *total* spherically averaged potential (disk
-  approximated by its spherically enclosed mass).  Speeds are sampled by rejection.
+  approximated by its spherically enclosed mass).  Speeds are sampled by inverse CDF.
   Speeds are capped so that every particle is bound in the truncated system.  The small
   random net momentum and rigid rotation left by finite sampling are removed.
 * Disk: mean rotation from the midplane circular speed and asymmetric-drift
@@ -236,24 +236,32 @@ def sample_hernquist_positions(rng, comp):
     return r[:, None] * _random_unit_vectors(rng, n), r
 
 
-def sample_isotropic_velocities(rng, model, df, r):
-    """Speeds from p(v) ~ v^2 f(psi - v^2/2) by rejection; isotropic directions."""
+def sample_isotropic_velocities(rng, model, df, r, n_grid=320, chunk=20000):
+    """Speeds from p(v) ~ v^2 f(psi - v^2/2) on [0, v_max] by inverse-CDF sampling on a
+    per-particle grid (quadratically spaced, dense at low v where the distribution of a
+    particle near the cusp centre is sharply peaked); isotropic directions.
+
+    v_max = sqrt(2 (psi - C)) keeps every particle bound in the truncated system."""
     psi = model.psi(r)
     C = model.truncation_offset()
     vmax = np.sqrt(2.0 * np.maximum(psi - C, 0.0))
-    fmax = df.fmax_below(psi) * 1.0001
-    v = np.zeros_like(r)
-    todo = np.arange(r.size)
-    for _ in range(10000):
-        if todo.size == 0:
-            break
-        vt = vmax[todo] * rng.random(todo.size) ** (1.0 / 3.0)   # proposal ~ v^2
-        E = psi[todo] - 0.5 * vt * vt
-        acc = rng.random(todo.size) * fmax[todo] <= df(E)
-        v[todo[acc]] = vt[acc]
-        todo = todo[~acc]
-    if todo.size:
-        raise RuntimeError("velocity rejection sampling did not converge")
+    s = np.linspace(0.0, 1.0, n_grid) ** 2
+    u = rng.random(r.size)
+    v = np.empty_like(r)
+    for a in range(0, r.size, chunk):
+        b = min(a + chunk, r.size)
+        vg = vmax[a:b, None] * s[None, :]
+        pdf = vg * vg * df(psi[a:b, None] - 0.5 * vg * vg)
+        cdf = np.concatenate([np.zeros((b - a, 1)),
+                              np.cumsum(0.5 * (pdf[:, 1:] + pdf[:, :-1]) * np.diff(vg, axis=1), axis=1)],
+                             axis=1)
+        cdf /= cdf[:, -1:]
+        k = np.clip((cdf < u[a:b, None]).sum(axis=1) - 1, 0, n_grid - 2)
+        rows = np.arange(b - a)
+        c0 = cdf[rows, k]
+        c1 = cdf[rows, k + 1]
+        f = np.where(c1 > c0, (u[a:b] - c0) / np.where(c1 > c0, c1 - c0, 1.0), 0.0)
+        v[a:b] = vg[rows, k] + f * (vg[rows, k + 1] - vg[rows, k])
     return v[:, None] * _random_unit_vectors(rng, r.size)
 
 
