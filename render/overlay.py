@@ -143,20 +143,43 @@ def draw_overlay(im, cfg, t_gyr, kpc_per_px, galaxy_colors, galaxy_names, frame,
     # --- scale bar (bottom left) ----------------------------------------------------
     sb = ov.get("scale_bar", {})
     if sb is not False:
-        kpc = float(sb.get("kpc", 20))
-        L = kpc / kpc_per_px
+        # kpc: a number, or [[t_gyr, kpc], ...] switch points (crossfade over fade_gyr)
+        spec = sb.get("kpc", 20)
+        if not isinstance(spec, list):
+            bars = [(float(spec), 1.0)]
+        else:
+            keys = sorted((float(t), float(v)) for t, v in spec)
+            fade = float(sb.get("fade_gyr", 0.1))
+            cur = keys[0][1]
+            bars = [(cur, 1.0)]
+            for (t0, v0), (t1, v1) in zip(keys, keys[1:]):
+                if t_gyr >= t1 + fade:
+                    bars = [(v1, 1.0)]
+                elif t_gyr > t1 - fade:
+                    x = (t_gyr - (t1 - fade)) / (2 * fade)
+                    x = x * x * (3 - 2 * x)
+                    bars = [(v0, 1.0 - x), (v1, x)]
+                    break
+                else:
+                    break
         yb = H - M - 4 * u
         lw = max(1, int(round(2 * u)))
-        d.line([(M, yb), (M + L, yb)], fill=P, width=lw)
-        for xx in (M, M + L):
-            d.line([(xx, yb - 9 * u), (xx, yb + 1 * u)], fill=P, width=lw)
         f1 = font("Medium", 23 * u)
-        lab = f"{kpc:g} kpc"
-        d.text((M, yb - 22 * u), lab, font=f1, fill=P, anchor="ls")
-        if sb.get("light_years", True):
-            w1 = d.textlength(lab, font=f1)
-            d.text((M + w1 + 12 * u, yb - 22 * u), f"{nice_ly(kpc)} light-years",
-                   font=font("Regular", 20 * u), fill=T, anchor="ls")
+        for kpc, a_bar in bars:
+            if a_bar <= 0.01:
+                continue
+            Pb = PRIMARY + (int(A * a_bar),)
+            Tb = TERTIARY + (int(A * a_bar),)
+            L = kpc / kpc_per_px
+            d.line([(M, yb), (M + L, yb)], fill=Pb, width=lw)
+            for xx in (M, M + L):
+                d.line([(xx, yb - 9 * u), (xx, yb + 1 * u)], fill=Pb, width=lw)
+            lab = f"{kpc:g} kpc"
+            d.text((M, yb - 22 * u), lab, font=f1, fill=Pb, anchor="ls")
+            if sb.get("light_years", True):
+                w1 = d.textlength(lab, font=f1)
+                d.text((M + w1 + 12 * u, yb - 22 * u), f"{nice_ly(kpc)} light-years",
+                       font=font("Regular", 20 * u), fill=Tb, anchor="ls")
 
     # --- provenance tag (bottom right) ---------------------------------------------
     tag = ov.get("tag", {})

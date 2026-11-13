@@ -207,6 +207,7 @@ class Renderer:
         self.az0 = float(cam.get("azimuth_deg", 0.0))
         self.az_rate = float(cam.get("azimuth_rate_deg_per_frame", 0.0))
         self.fov = float(cam.get("fov_deg", 40.0))
+        self.c_roll = Curve(cam.get("roll_deg", 0.0))
         tgt = cam.get("target", [0.0, 0.0, 0.0])
         self.c_tgt = [Curve(v) for v in tgt] if not isinstance(tgt, str) else None
         self.frames = self.plan_frames()
@@ -233,7 +234,8 @@ class Renderer:
         x = t_gyr if self.cam_key == "time_gyr" else frame
         tgt = [c(x) for c in self.c_tgt] if self.c_tgt else [0.0, 0.0, 0.0]
         az = self.az0 + self.az_rate * frame + self.c_azk(x)
-        return Camera(tgt, self.c_dist(x), az, self.c_elev(x), self.fov, self.W * ss, self.H * ss)
+        return Camera(tgt, self.c_dist(x), az, self.c_elev(x), self.fov, self.W * ss, self.H * ss,
+                      self.c_roll(x))
 
     # ------------------------------------------------------------ light
     def splat(self, pos, cam):

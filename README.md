@@ -19,7 +19,7 @@ checks every exported clip against those snapshots.
 | Phase | Content | State |
 |---|---|---|
 | 1 | N-body engine, tests, benchmark, 5k preview | **done (Checkpoint 1)** |
-| 2 | Milky Way–Andromeda scenario, final-resolution run, renderer | not started |
+| 2 | Milky Way–Andromeda scenario, final-resolution run, renderer | in progress (Checkpoint 2) |
 | 3 | Manim explainer, script, scratch narration | not started |
 | 4 | Assembly, captions, LinkedIn deliverables | not started |
 
@@ -147,6 +147,68 @@ One command that regenerates the 100k preview footage from scratch:
 
 ```bash
 . .venv/bin/activate && python -m nbody.run scenarios/preview_collision_100k.yaml --schedule scenarios/schedules/preview_100k.yaml && python -m render.render render/configs/preview_100k.yaml && python -m render.verify output/renders/preview_100k/preview_100k_collision.mp4 --rerender 4
+```
+
+### Phase 2: Milky Way – Andromeda
+
+The scenario `scenarios/mw_m31_vdm2012.yaml` follows the canonical N-body model of van der
+Marel et al. 2012 (Paper III). Every parameter, its source and every assumption are listed in
+`sources.md`. The run uses 100,000 particles split 55 / 5 / 40 between dark matter, bulge and
+disk, with equal particle masses per species in both galaxies. The softening is 0.2 kpc and
+the timestep 1 Myr.
+
+Run 1, the coarse run (10 Gyr, one snapshot every 20 Myr, about 80 minutes):
+
+```bash
+. .venv/bin/activate && python -m nbody.run scenarios/mw_m31_vdm2012.yaml --name mw_m31_vdm2012_coarse
+```
+
+Find the passages and the merger time (merger: centres within 5 kpc, the vdM2012 definition):
+
+```bash
+. .venv/bin/activate && python -m nbody.analysis output/runs/mw_m31_vdm2012_coarse --merge-kpc 5
+```
+
+Run 2, the rerun with the edit's time remap, then render and verify:
+
+```bash
+. .venv/bin/activate && python -m nbody.run scenarios/mw_m31_vdm2012.yaml --schedule scenarios/schedules/mw_m31.yaml
+```
+
+```bash
+. .venv/bin/activate && python -m render.render render/configs/mw_m31.yaml
+```
+
+```bash
+. .venv/bin/activate && python -m render.verify output/renders/mw_m31/mw_m31_collision.mp4 --rerender 4
+```
+
+One command that regenerates the collision footage from scratch:
+
+```bash
+. .venv/bin/activate && python -m nbody.run scenarios/mw_m31_vdm2012.yaml --schedule scenarios/schedules/mw_m31.yaml && python -m render.render render/configs/mw_m31.yaml && python -m render.verify output/renders/mw_m31/mw_m31_collision.mp4 --rerender 4
+```
+
+#### Prograde vs retrograde (low resolution)
+
+Two identical 20,000-particle encounters that differ only in the disks' spin direction:
+
+```bash
+. .venv/bin/activate && for k in prograde retrograde; do python -m nbody.run scenarios/compare_$k.yaml --schedule scenarios/schedules/compare.yaml && python -m render.render render/configs/compare_$k.yaml && python -m render.verify output/renders/compare_$k/compare_$k.mp4; done
+```
+
+Stack the two verified panels; both use the same step sequence, so frames align:
+
+```bash
+ffmpeg -y -i output/renders/compare_prograde/compare_prograde.mp4 -i output/renders/compare_retrograde/compare_retrograde.mp4 -filter_complex "[0:v]pad=1080:676:0:0:color=0x1A1E28[a];[a][1:v]vstack=inputs=2,format=yuv420p[v]" -map "[v]" -c:v libx264 -preset slow -crf 14 -r 30 output/renders/compare/prograde_vs_retrograde.mp4
+```
+
+#### Disk-heating test
+
+The particle split was chosen from this test. Its results are in `output/logs/heating_report.md`.
+
+```bash
+. .venv/bin/activate && for v in a_100k_default b_100k_halo_heavy c_200k_dt2 d_200k_halo_heavy; do python -m nbody.run scenarios/heating/$v.yaml --out output/heating; done && python benchmarks/heating_report.py output/heating/heating_*
 ```
 
 ## The renderer (`render/`)
