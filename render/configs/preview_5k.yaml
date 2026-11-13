@@ -12,15 +12,15 @@ frames:
 camera:                # presentation only: the camera moves, the particles come from snapshots
   key: frame
   target: [0.0, 0.0, 0.0]
-  distance_kpc: [[0, 260], [120, 170], [600, 150]]
+  distance_kpc: [[0, 260], [150, 175], [320, 200], [620, 250]]
   elevation_deg: [[0, 55], [600, 35]]
   azimuth_deg: -60
   azimuth_rate_deg_per_frame: 0.06
   fov_deg: 40
 style:
-  smooth_kpc: 0.45
-  density_lo: 2.0e5
-  density_hi: 3.0e9
+  smooth_kpc: 0.8
+  density_lo: 2.5e6
+  density_hi: 2.0e9
   glow: [[1.2, 0.35], [5.0, 0.22]]
 overlay:
   time: true
