@@ -1,5 +1,5 @@
 # Current task
-Status: building
+Status: done
 Request: Phase 2 with the disk-heating fix ("implement the fix to phase 2"), in the crisp look B.
 ## Brief
 - Outcome: Checkpoint 2 - MW-M31 raw collision clip from the final run, frames_manifest.csv, verify output; sources.md; parameter file; low-res prograde vs retrograde comparison.
@@ -15,9 +15,9 @@ Request: Phase 2 with the disk-heating fix ("implement the fix to phase 2"), in 
 - [x] coarse run (82 min, dE 0.53 %): pericentre 3.72 Gyr / 25 kpc, apocentre 4.36 / 137, 2nd passage 5.22, merged 5.56 Gyr
 - [x] prograde vs retrograde: both panels verified, stacked composite sent
 - [x] remap scenarios/schedules/mw_m31.yaml (1161 frames, 38.7 s); camera from measured separation; framing checked on coarse stills
-- [~] dense rerun started at commit 6be176a (~80 min)
-- [ ] render look B (black point 5e6) -> verify -> Checkpoint 2
-- [ ] README Phase 2 commands, Checkpoint 2 report
+- [x] dense rerun (commit 6be176a): 1161 snapshots, bitwise identical to coarse at 102 shared steps, dE 0.53 %
+- [x] render look B (black point 5e6); scale-bar crossfade defect found on contact sheet and fixed (sequential fade); render.verify ALL PASS (min PSNR 41.5 dB)
+- [x] README Phase 2 commands; pytest 31 passed
 ## Observations
 - 2026-11-13 heating hypothesis (halo particle noise dominates) only partly right: 2.8x lighter halo particles -> 1.4x lower rate; bars dominate. Testing before committing to 200k saved a 2+ h run that would have failed energy.
 - 2026-11-13 framing stills on the coarse run caught clipped tails (3.9 Gyr) and a frame-filling remnant (5.6 Gyr) before the 80-min dense run was rendered

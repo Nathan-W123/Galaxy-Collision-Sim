@@ -19,7 +19,7 @@ checks every exported clip against those snapshots.
 | Phase | Content | State |
 |---|---|---|
 | 1 | N-body engine, tests, benchmark, 5k preview | **done (Checkpoint 1)** |
-| 2 | Milky Way–Andromeda scenario, final-resolution run, renderer | in progress (Checkpoint 2) |
+| 2 | Milky Way–Andromeda scenario, final-resolution run, renderer | **done (Checkpoint 2)** |
 | 3 | Manim explainer, script, scratch narration | not started |
 | 4 | Assembly, captions, LinkedIn deliverables | not started |
 
