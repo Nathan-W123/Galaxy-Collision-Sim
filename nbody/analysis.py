@@ -63,6 +63,10 @@ def main(argv=None):
     ap.add_argument("run_dir")
     ap.add_argument("--stride", type=int, default=1)
     ap.add_argument("--merge-kpc", type=float, default=3.0)
+    ap.add_argument("--camera-keys", action="store_true",
+                    help="suggest camera distance keys: distance = factor * separation + margin")
+    ap.add_argument("--camera-factor", type=float, default=1.9)
+    ap.add_argument("--camera-margin", type=float, default=160.0)
     a = ap.parse_args(argv)
     meta = read_json(Path(a.run_dir) / "run_meta.json")
     t, c = galaxy_track(a.run_dir, a.stride)
@@ -76,6 +80,19 @@ def main(argv=None):
     print("pericentre passages (local minima of the sampled separation):")
     for tp, sp in pericentres(t, sep):
         print(f"  t={tp:.3f} Gyr  d={sp:.2f} kpc")
+    peri = pericentres(t, sep)
+    print("apocentres (maxima between passages):")
+    for (t0, _), (t1, _) in zip(peri, peri[1:]):
+        sel = (t > t0) & (t < t1)
+        if sel.any():
+            k = np.argmax(np.where(sel, sep, -1))
+            print(f"  t={t[k]:.3f} Gyr  d={sep[k]:.2f} kpc")
+    if a.camera_keys:
+        keys = []
+        for tk in np.unique(np.concatenate([np.arange(0, t[-1] + 1e-9, 0.5), [p[0] for p in peri]])):
+            sk = float(np.interp(tk, t, sep))
+            keys.append([round(float(tk), 2), round(a.camera_factor * sk + a.camera_margin)])
+        print("suggested camera distance_kpc keys:", keys)
     merged = np.nonzero(sep < a.merge_kpc)[0]
     if merged.size:
         # first time after which the centres stay within merge_kpc

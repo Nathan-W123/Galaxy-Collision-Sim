@@ -1,0 +1,19 @@
+# Time remap for the MW-M31 raw collision clip, chosen from the coarse run:
+#   python -m nbody.analysis output/runs/mw_m31_vdm2012_coarse --merge-kpc 5
+# found (20 Myr sampling): first pericentre t = 3.72 Gyr (25 kpc); apocentre 4.36 Gyr
+# (137 kpc); second passage 5.22 Gyr (5 kpc); centres within 5 kpc from 5.56 Gyr (merger).
+# Playback speed in Myr per frame vs. simulation time (geometric ramps between keys).
+# One snapshot per frame; nothing interpolated.
+render:
+  speed_myr_per_frame:
+    - [0.00, 15]     # approach: ~6 s of footage for the hook
+    - [2.80, 15]
+    - [3.50, 2]      # first passage in slow motion
+    - [3.98, 2]
+    - [4.20, 8]      # swing out to apocentre, tidal tails
+    - [4.95, 8]
+    - [5.10, 3]      # second passage and coalescence
+    - [5.75, 3]
+    - [6.10, 30]     # the merged remnant settles
+    - [10.0, 30]
+checkpoint_every_myr: 500
