@@ -22,3 +22,15 @@
 - Alternatives considered: A smooth only (rejected as fuzzy), C star field (faint tails dissolve into dots).
 - Source: stated by user (picked B from full-res stills)
 - Revisit if: graininess or twinkle shows in motion.
+### D-05 · MW-M31 initial conditions: vdM2012 Paper III canonical (2026-11-13)
+- Decision: final run uses the Paper III canonical N-body setup and M31 velocity (72.6, -69.7, 50.9) km/s; no Gaia-velocity clip.
+- Why: only fully specified source with disks; full collision + merger within 10 Gyr; 5k check reproduced the published timeline (first pericentre 3.72 vs 3.87 Gyr).
+- Alternatives considered: vdM2019 Gaia velocity (wide flyby, merger only begins at 10 Gyr); running both.
+- Source: stated by user ("2012 only")
+- Revisit if: the script needs to show the near-miss future; Sawala 2025's ~50 % odds must be stated on screen/script regardless.
+### D-06 · Particle split 55 / 5 / 40 (halo / bulge / disk) of 100k (2026-11-13)
+- Decision: `particles: {total: 100000, split: {halo: 0.55, bulge: 0.05, disk: 0.40}}`; equal particle mass per species across both galaxies.
+- Why: heating test showed allocation is a weak lever (bars dominate thickening); keeps 45k star particles for the crisp look; 200k@dt=2 fails energy.
+- Alternatives considered: 50/10/40, 70/5/25, 200k at dt = 2 Myr.
+- Source: recommended and approved
+- Revisit if: disks look too thick at the encounter.

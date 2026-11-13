@@ -27,7 +27,7 @@ simulation:
 
 particles:
   total: 100000
-  split: {halo: 0.5, bulge: 0.1, disk: 0.4}
+  split: {halo: 0.55, bulge: 0.05, disk: 0.40}   # decisions D-06
 
 output:
   render:
