@@ -1,0 +1,31 @@
+# The test collision at final resolution (100,000 particles), 1080x1350 (4:5).
+run: output/runs/preview_collision_100k
+out: output/renders/preview_100k
+video_name: preview_100k_collision.mp4
+width: 1080
+height: 1350
+fps: 30
+crf: 16
+frames: {start_gyr: 0.0, end_gyr: 3.0}
+camera:                       # presentation only; keyed by simulation time (Gyr)
+  key: time_gyr
+  target: [0.0, 0.0, 0.0]
+  distance_kpc: [[0.0, 330], [0.22, 175], [0.45, 190], [0.9, 235], [1.25, 180], [1.7, 190], [3.0, 210]]
+  elevation_deg: [[0.0, 52], [0.4, 40], [1.5, 34], [3.0, 30]]
+  azimuth_deg: -55
+  azimuth_rate_deg_per_frame: 0.045
+  fov_deg: 38
+style:
+  knn: 24
+  kernel_scale: 0.34          # Gaussian sigma = 0.34 x distance to the 24th neighbour
+  h_max_kpc: 1.6
+  density_lo: 6.0e5
+  density_hi: 3.0e9
+  exposure: 1.4
+  bloom: {strength: 0.35, threshold: 0.55, radii: [0.003, 0.01, 0.03], weights: [0.55, 0.3, 0.15]}
+overlay:
+  fade_in_frames: 12
+  time: {label: "SIMULATED TIME", unit: "billion years", decimals: 2}
+  legend: [{name: "Galaxy A", galaxy: 0}, {name: "Galaxy B", galaxy: 1}]
+  scale_bar: {kpc: 20}
+  tag: {title: "N-BODY SIMULATION", subtitle: "100,000 particles · test galaxies"}

@@ -28,7 +28,7 @@ checks every exported clip against those snapshots.
 ```
 nbody/        engine: units, direct + Barnes-Hut forces, KDK leapfrog, ICs, snapshot I/O, runner
 scenarios/    parameter files (physics) and schedules/ (snapshot cadence for an edit)
-render/       renderer (reads only snapshot files), camera, verification script, render configs
+render/       renderer (reads only snapshot files), camera, overlay, verification script, configs
 benchmarks/   step-time benchmark
 tests/        pytest suite
 explainer/    Manim scenes            (Phase 3)
@@ -103,10 +103,13 @@ Run the benchmark (step time vs N, wall-time estimate for the final run):
 . .venv/bin/activate && python benchmarks/bench_step.py
 ```
 
-### Checkpoint-1 preview (5,000-particle test collision)
+### Checkpoint-1 previews (test collision at 5,000 and 100,000 particles)
 
-The workflow is: coarse run, then find the interesting moments, then rerun with dense output
-in those windows. Slow motion comes from snapshot cadence, never from interpolation.
+Workflow: coarse run -> find the interesting moments -> choose the time remap (playback
+speed in Myr per frame vs. simulation time) -> deterministic rerun that writes exactly
+the snapshots the edit needs. Slow motion comes from snapshot cadence, never from
+interpolation; speed changes ramp gently because the remap is a staircase of
+whole-step cadences.
 
 Run 1, the coarse run (one snapshot every 10 Myr):
 
@@ -120,7 +123,7 @@ Find the pericentre passages and the merger time:
 . .venv/bin/activate && python -m nbody.analysis output/runs/test_collision_5k_coarse
 ```
 
-Run 2, the deterministic rerun (same seed and physics) with the schedule chosen from run 1:
+Run 2, the rerun with the edit's time remap (same seed and physics):
 
 ```bash
 . .venv/bin/activate && python -m nbody.run scenarios/test_collision_5k.yaml --schedule scenarios/schedules/preview_5k.yaml
@@ -136,11 +139,34 @@ Render from the snapshots, then verify the clip:
 . .venv/bin/activate && python -m render.verify output/renders/preview_5k/preview_5k_collision.mp4 --rerender 4
 ```
 
-Or regenerate the preview footage from scratch with one command:
+The 100,000-particle version is the same, with `scenarios/preview_collision_100k.yaml`,
+`scenarios/schedules/preview_100k.yaml` and `render/configs/preview_100k.yaml`. Each
+100k run takes about 25 minutes on 4 cores; rendering takes about 6 minutes.
+
+One command that regenerates the 100k preview footage from scratch:
 
 ```bash
-. .venv/bin/activate && python -m nbody.run scenarios/test_collision_5k.yaml --schedule scenarios/schedules/preview_5k.yaml && python -m render.render render/configs/preview_5k.yaml && python -m render.verify output/renders/preview_5k/preview_5k_collision.mp4 --rerender 4
+. .venv/bin/activate && python -m nbody.run scenarios/preview_collision_100k.yaml --schedule scenarios/schedules/preview_100k.yaml && python -m render.render render/configs/preview_100k.yaml && python -m render.verify output/renders/preview_100k/preview_100k_collision.mp4 --rerender 4
 ```
+
+## The renderer (`render/`)
+
+The renderer reads only snapshot files. Each frame:
+
+1. Takes the star particles (dark matter hidden).
+2. Gives each particle a smoothing length from the distance to its k-th nearest
+   neighbour. This is adaptive kernel density estimation, as used to visualise SPH
+   simulations: dense disks stay sharp and sparse tidal debris goes soft.
+3. Deposits each particle's light as a normalised Gaussian on a 2x supersampled canvas.
+   Wide kernels go to coarser levels of an image pyramid.
+4. Maps log surface density through a filmic tone curve. Colour comes from the galaxy of
+   origin, with paler bulges.
+5. Adds bloom from the highlights only, plus dithering against banding.
+
+The camera follows monotone-cubic (PCHIP) curves, so it never stops and starts at
+keyframes. The overlay layout (`render/overlay.py`) uses Inter with tabular figures, a
+fixed-label scale bar and soft scrims behind the text. Every one of these settings is
+presentation; particle positions are never altered or interpolated.
 
 ## Provenance
 

@@ -1,0 +1,19 @@
+# Snapshot schedule (time remap) for the 100k preview, chosen from the coarse run:
+#   python -m nbody.analysis output/runs/preview_collision_100k_coarse
+# found: first pericentre t = 0.26 Gyr (17 kpc); second passage t = 1.31 Gyr;
+# centres merged (< 3 kpc apart for good) from t = 1.50 Gyr.
+# Playback speed in Myr per frame vs. simulation time (geometric ramps between keys).
+# Slow motion = more snapshots per Gyr; one snapshot per frame; nothing interpolated.
+render:
+  speed_myr_per_frame:
+    - [0.00, 6]
+    - [0.12, 6]
+    - [0.20, 2]      # first passage: 3x slower than the approach
+    - [0.42, 2]
+    - [0.55, 10]     # tidal tails swing out
+    - [1.08, 10]
+    - [1.22, 2]      # second passage and coalescence
+    - [1.58, 2]
+    - [1.78, 12]     # remnant settles
+    - [3.00, 12]
+checkpoint_every_myr: 500
