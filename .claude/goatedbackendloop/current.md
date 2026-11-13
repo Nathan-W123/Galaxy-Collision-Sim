@@ -1,20 +1,18 @@
 # Current task
-Status: done
-Request: Make the 100k collision render crisp and clear (user: "still very fuzzy i cant see great"), then implement the Phase 2 fix (disk heating) and continue Phase 2.
+Status: clarifying
+Request: Phase 2 with the disk-heating fix ("implement the fix to phase 2"), in the crisp look B.
 ## Brief
-- Outcome: simulation frames where structure (spiral arms, bridges, tails, cores) reads sharply at 1080x1350.
-- Diagnosis: (1) every particle drawn as a 2-4 px soft kernel -> continuous fog, nothing sharp; (2) low black point (6e5 Msun/kpc^2) shows faint outer disk as haze; (3) bloom adds halo; (4) physics: disks thicken by two-body heating, remnant is genuinely smooth.
-- Approach: hybrid star rendering. Layer 1: every star particle as a crisp ~1 px point (star-field texture, gives the eye detail). Layer 2: the adaptive-kernel diffuse light at reduced weight (body, continuity). Raise black point, cut bloom to a tight core glow, mild local-contrast ("clarity"). Presentation only; positions untouched.
-- Tradeoff: crisp points show particle graininess (honest about N=100k); smooth light hides it but looks soft.
-- Success: user picks a still variant; full clip re-rendered in that look passes render.verify; fine structure visible at 100% zoom.
-- Then Phase 2: isolated MW model at final N for 4 Gyr -> choose disk-heating fix (particle allocation / DM softening / dt) -> sources + params -> MW-M31 run.
+- Outcome: Checkpoint 2 - MW-M31 raw collision clip from the final run, frames_manifest.csv, verify output; sources.md; parameter file; low-res prograde vs retrograde comparison.
+- Approach: vdM2012 Paper III canonical N-body setup (only fully specified source with disks); equal per-species particle masses via `particles` budget; coarse 10 Gyr run -> events -> remap -> dense rerun -> render (look B) -> verify.
+- Tradeoff: the 2012 velocity gives a full merger in 10 Gyr; the 2019 Gaia velocity gives a wide flyby with the merger only starting at 10 Gyr. Sawala 2025: ~50 % odds either way.
+- Success: published timeline reproduced at full resolution; render.verify ALL PASS; energy drift < 1 %.
 ## Progress
-- [x] point layer + clarity in renderer
-- [x] still comparison (3 variants, 2 moments) shown to user, pick -> B (D-04)
-- [x] re-render 100k clip in look B; render.verify ALL PASS (min re-render PSNR 41.4 dB); consecutive frames coherent (no twinkle)
-- [ ] Phase 2
+- [x] literature verified (scratchpad/phase2_sources.md -> sources.md)
+- [x] heating test (output/logs/heating_report.md): 200k@dt2 fails energy (0.8-1.1 %); halo-heavy split -25 % heating rate; most thickening is bar/spiral dynamics (models bar-unstable, ELK X 0.74-0.88; A2 up to 0.3)
+- [x] 5k orbit checks: A first pericentre 3.72 Gyr / 24 kpc (pub. 3.87 / 31), merged ~5.6 Gyr (pub. 5.86); B 4.34 Gyr / 116 kpc (pub. ~4.5 / ~130), merger starts ~10 Gyr
+- [ ] user: orbit + particle split
+- [ ] sources.md, params, coarse run, events, remap, dense run, render, verify
+- [ ] prograde vs retrograde low-res comparison
 ## Observations
-- 2026-11-13 user rejected two clips on look; switching to stills-first (L-01)
-- 2026-11-13 stills comparison -> user picked B in one round, no re-render wasted (L-01 helped)
-- 2026-11-13 fine point detail raises H.264 bitrate (20 s clip = 36 MB at crf 14); fine for masters, revisit for LinkedIn export
+- 2026-11-13 heating hypothesis (halo particle noise dominates) only partly right: 2.8x lighter halo particles -> 1.4x lower rate; bars dominate. Testing before committing to 200k saved a 2+ h run that would have failed energy.
 ## Handoff

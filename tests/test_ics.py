@@ -68,3 +68,18 @@ def test_halo_velocities_match_jeans_equation():
         s2 = np.trapezoid(rho[msk] * g[msk], rg[msk]) / np.interp(rc, rg, rho)
         s1 = np.sqrt(np.sum(v[sel] ** 2, axis=1).mean() / 3)
         assert abs(s1 / np.sqrt(s2) - 1) < 0.03
+
+
+def test_particle_budget_gives_equal_particle_masses():
+    from nbody.ics import allocate_particles
+    p = load_yaml("test_collision_5k.yaml")
+    p["galaxies"][1]["model"] = {**p["galaxies"][1]["model"],
+                                 "halo": {**p["galaxies"][1]["model"]["halo"], "mass": 75.0}}
+    p["particles"] = {"total": 10000, "split": {"halo": 0.6, "bulge": 0.05, "disk": 0.35}}
+    q = allocate_particles(p)
+    nh = [g["model"]["halo"]["n"] for g in q["galaxies"]]
+    assert sum(nh) == 6000 and nh == [2400, 3600]
+    ics = make_initial_conditions(p)
+    for t in (0, 1, 2):
+        assert np.ptp(ics["mass"][ics["ptype"] == t]) < 1e-12 * ics["mass"][ics["ptype"] == t].max()
+    assert ics["mass"].size == 10000

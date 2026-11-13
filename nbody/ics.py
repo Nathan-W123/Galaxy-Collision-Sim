@@ -390,11 +390,39 @@ def relative_orbit(orbit_cfg, M_total, G=G_DEFAULT):
     raise ValueError(kind)
 
 
+def allocate_particles(params):
+    """Fill in per-component particle numbers from a total budget.
+
+    ``particles: {total: 100000, split: {halo: 0.6, bulge: 0.05, disk: 0.35}}`` gives each
+    species (halo, bulge, disk) ``total * split`` particles, shared between the galaxies in
+    proportion to their component masses, so every particle of a species has the same mass
+    in every galaxy (no heavy-particle heating of one galaxy by the other)."""
+    spec = params.get("particles")
+    if not spec:
+        return params
+    import copy
+    params = copy.deepcopy(params)
+    total = int(spec["total"])
+    split = spec["split"]
+    if abs(sum(split.values()) - 1.0) > 1e-9:
+        raise ValueError("particles.split must sum to 1")
+    for comp, frac in split.items():
+        masses = [float((g["model"].get(comp) or {}).get("mass", 0.0)) for g in params["galaxies"]]
+        n_comp = int(round(total * frac))
+        mt = sum(masses)
+        for g, m in zip(params["galaxies"], masses):
+            if g["model"].get(comp) is not None:
+                g["model"][comp] = dict(g["model"][comp])
+                g["model"][comp]["n"] = int(round(n_comp * m / mt)) if mt > 0 else 0
+    return params
+
+
 def make_initial_conditions(params, G=G_DEFAULT):
     """Build every particle of the scenario.  Deterministic for a given seed.
 
     Returns dict with pos, vel, mass, ptype, galaxy, galaxy_names, models.
     """
+    params = allocate_particles(params)
     seed = int(params["seed"])
     gals = params["galaxies"]
     ss = np.random.SeedSequence(seed)

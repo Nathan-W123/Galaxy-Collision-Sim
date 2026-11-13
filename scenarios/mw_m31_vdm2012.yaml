@@ -1,0 +1,56 @@
+# Milky Way - Andromeda (M31) encounter.  Galaxy models and initial conditions follow the
+# canonical N-body model of van der Marel et al. 2012, ApJ 753, 9 (Paper III); see sources.md.
+# Frame: Galactocentric (MW at the origin, initially at rest relative to M31's vector);
+# Sun at X = -8.29 kpc in vdM's convention.  Units: kpc, km/s, 1e10 Msun.
+#
+# Halo: Hernquist, a = 62.5 kpc (Paper III Sec. 3.1), total Hernquist mass
+#   M_H = 1.36 * (Mvir - Md - Mb) = 1.36 * 1.415e12 = 1.924e12 Msun (Paper II App. A, c = 10),
+#   realised out to r_max = 600 kpc (~2 r_vir): 82.0 % of M_H = 1.578e12 Msun.
+# Disk:  MW Md = 7.5e10, Rd = 3.0 kpc; M31 Md = 1.2e11, Rd = 5.0 kpc (Paper III Tables 1-2).
+#   Scale heights are not given in Paper III; assumed z0 = 0.1 Rd (assumption, see sources.md).
+# Bulge: MW Mb = 1.0e10, M31 1.9e10; R^1/4 effective radii 0.6 / 1.0 kpc (Paper III Table 1)
+#   -> Hernquist a = R_e / 1.8153 = 0.33 / 0.55 kpc.
+# Spins: MW (0, 0, -1); M31 (-0.412, -0.767, -0.492) (Paper III Sec. 3.2).
+# M31 position (-378.9, 612.7, -283.1) kpc (Paper II); velocity: Paper III canonical N-body
+#   vector (72.6, -69.7, 50.9) km/s (Table 2; Vtan = 27.7 km/s).
+# Black holes and M33 are not modelled.
+name: mw_m31_vdm2012
+seed: 20120601
+
+simulation:
+  t_end_gyr: 10.0
+  dt_myr: 1.0
+  softening_kpc: 0.2
+  solver: tree
+  theta: 0.6
+  leaf_size: 8
+
+particles:
+  total: 100000
+  split: {halo: 0.5, bulge: 0.1, disk: 0.4}
+
+output:
+  render:
+    every_myr: 20
+  checkpoint_every_myr: 500
+
+galaxies:
+  - name: Milky Way
+    spin: [0.0, 0.0, -1.0]
+    model:
+      vc_method: freeman
+      halo:  {mass: 157.8, scale_radius: 62.5, r_max: 600.0}
+      bulge: {mass: 1.0,   scale_radius: 0.33, r_max: 10.0}
+      disk:  {mass: 7.5,   scale_length: 3.0, scale_height: 0.3, r_max: 30.0, toomre_q: 1.5}
+  - name: Andromeda
+    spin: [-0.412, -0.767, -0.492]
+    model:
+      vc_method: freeman
+      halo:  {mass: 157.8, scale_radius: 62.5, r_max: 600.0}
+      bulge: {mass: 1.9,   scale_radius: 0.55, r_max: 10.0}
+      disk:  {mass: 12.0,  scale_length: 5.0, scale_height: 0.5, r_max: 50.0, toomre_q: 1.5}
+
+orbit:
+  type: vectors
+  relative_position_kpc: [-378.9, 612.7, -283.1]
+  relative_velocity_kms: [72.6, -69.7, 50.9]
