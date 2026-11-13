@@ -120,8 +120,15 @@ def draw_overlay(im, cfg, t_gyr, kpc_per_px, galaxy_colors, galaxy_names, frame,
         nw = d.textlength(num, font=fbig, features=TNUM)
         d.text((M + nw + 12 * u, y_num), unit, font=font("Regular", 28 * u), fill=S, anchor="ls")
 
+    # --- panel title (top right; replaces the legend when given) --------------------
+    pt = ov.get("title")
+    if pt:
+        tracked(d, (W - M, M + 18 * u), pt["text"], font("SemiBold", 21 * u), P, 2.2 * u, anchor="rs")
+        if pt.get("sub"):
+            d.text((W - M, M + 50 * u), pt["sub"], font=font("Regular", 21 * u), fill=S, anchor="rs")
+
     # --- legend (top right) --------------------------------------------------------
-    lg = ov.get("legend", True)
+    lg = ov.get("legend", True) if not pt else False
     if lg:
         entries = lg if isinstance(lg, list) else [{"name": n, "galaxy": i} for i, n in enumerate(galaxy_names)]
         f = font("Medium", 24 * u)

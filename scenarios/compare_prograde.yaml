@@ -1,0 +1,38 @@
+# Prograde vs retrograde comparison (low resolution, 20,000 particles): both disks spin in the same sense as the orbit.
+# Identical galaxies, orbit and seed in both runs; only the disk spin direction differs.
+# Generic test galaxies (as in the preview), not the MW-M31 models.
+name: compare_prograde
+seed: 31415
+
+simulation:
+  t_end_gyr: 1.6
+  dt_myr: 1.0
+  softening_kpc: 0.3
+  solver: tree
+  theta: 0.6
+  leaf_size: 8
+
+particles:
+  total: 20000
+  split: {halo: 0.5, bulge: 0.1, disk: 0.4}
+
+output:
+  render:
+    every_myr: 10
+  checkpoint_every_myr: 400
+
+test_galaxy: &galaxy
+  vc_method: freeman
+  halo:  {mass: 50.0, scale_radius: 20.0, r_max: 150.0}
+  bulge: {mass: 1.0,  scale_radius: 0.6,  r_max: 10.0}
+  disk:  {mass: 4.0,  scale_length: 3.0,  scale_height: 0.3, r_max: 24.0, toomre_q: 1.5}
+
+galaxies:
+  - {name: A, model: *galaxy, spin: [0.0, 0.0, 1.0]}
+  - {name: B, model: *galaxy, spin: [0.0, 0.0, 1.0]}
+
+orbit:                  # orbital angular momentum along +z
+  type: kepler
+  separation_kpc: 100.0
+  pericenter_kpc: 15.0
+  eccentricity: 1.0

@@ -1,0 +1,11 @@
+# Time remap for the prograde/retrograde comparison (both runs share it, so frames align).
+# Pericentre is near t = 0.26 Gyr for this orbit (same as the preview collision).
+render:
+  speed_myr_per_frame:
+    - [0.00, 6]
+    - [0.14, 6]
+    - [0.20, 2.0]
+    - [0.42, 2.0]
+    - [0.60, 6]
+    - [1.60, 6]
+checkpoint_every_myr: 400
