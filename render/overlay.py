@@ -156,9 +156,12 @@ def draw_overlay(im, cfg, t_gyr, kpc_per_px, galaxy_colors, galaxy_names, frame,
                 if t_gyr >= t1 + fade:
                     bars = [(v1, 1.0)]
                 elif t_gyr > t1 - fade:
+                    # sequential: the old bar fades out completely, then the new fades in
+                    # (overlapping labels at the same spot read as garbled text)
                     x = (t_gyr - (t1 - fade)) / (2 * fade)
-                    x = x * x * (3 - 2 * x)
-                    bars = [(v0, 1.0 - x), (v1, x)]
+                    y = 1.0 - 2.0 * x if x < 0.5 else 2.0 * x - 1.0
+                    y = y * y * (3 - 2 * y)
+                    bars = [(v0, y)] if x < 0.5 else [(v1, y)]
                     break
                 else:
                     break

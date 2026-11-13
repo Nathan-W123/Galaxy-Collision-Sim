@@ -33,5 +33,5 @@ overlay:
   fade_in_frames: 15
   time: {label: "TIME FROM NOW", unit: "billion years", decimals: 2}
   legend: [{name: "Milky Way", galaxy: 0}, {name: "Andromeda", galaxy: 1}]
-  scale_bar: {kpc: [[0.0, 200], [2.7, 50], [3.5, 20]], fade_gyr: 0.12}
+  scale_bar: {kpc: [[0.0, 200], [2.7, 50]], fade_gyr: 0.12}
   tag: {title: "N-BODY SIMULATION", subtitle: "100,000 particles · one possible future"}
