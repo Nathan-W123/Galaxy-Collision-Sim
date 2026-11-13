@@ -31,3 +31,17 @@ def test_overlapping_windows_rejected():
 
 def test_checkpoints():
     assert list(build_checkpoint_steps(500, 1.0, 1200)) == [0, 500, 1000, 1200]
+
+
+def test_speed_remap_is_a_gentle_staircase():
+    from nbody.schedule import build_remap_steps
+    keys = [[0.0, 10], [0.2, 10], [0.4, 2], [0.6, 2], [0.8, 10]]
+    s = build_remap_steps(keys, 1.0, 1200)
+    d = np.diff(s)
+    assert s[0] == 0 and s[-1] == 1200 and np.all(d >= 1)
+    assert d[:10].tolist() == [10] * 10
+    inside = d[(s[:-1] >= 400) & (s[:-1] < 600)]
+    assert np.all(inside == 2)
+    # no frame-to-frame speed change larger than one step (+-1 Myr here) except at ends
+    ramp = d[(s[:-1] > 200) & (s[:-1] < 400)]
+    assert np.all(np.abs(np.diff(ramp)) <= 1)

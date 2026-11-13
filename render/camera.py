@@ -1,34 +1,42 @@
 """Camera path (hand-authored presentation) and perspective projection."""
 import numpy as np
+from scipy.interpolate import PchipInterpolator
 
 
-def smoothstep(x):
-    x = np.clip(x, 0.0, 1.0)
-    return x * x * (3.0 - 2.0 * x)
+class Curve:
+    """A scalar presentation parameter: a constant, or keys ``[[x0, v0], [x1, v1], ...]``
+    joined by a monotone cubic (PCHIP).  Velocity is continuous through every key (no
+    stop-start at keyframes) and there is no overshoot.  Constant before the first and
+    after the last key.
 
+    Used only for camera parameters.  Particle positions are never interpolated."""
 
-def keyframed(keys, x):
-    """Piecewise smoothstep interpolation of ``[[x0, v0], [x1, v1], ...]`` at ``x``.
+    def __init__(self, spec):
+        if spec is None or np.isscalar(spec):
+            self.const = None if spec is None else float(spec)
+            self.f = None
+            return
+        keys = sorted((float(k[0]), float(k[1])) for k in spec)
+        self.x0, self.x1 = keys[0][0], keys[-1][0]
+        self.v0, self.v1 = keys[0][1], keys[-1][1]
+        self.const = keys[0][1] if len(keys) == 1 else None
+        self.f = PchipInterpolator([k[0] for k in keys], [k[1] for k in keys]) if len(keys) > 1 else None
 
-    Used only for camera parameters (presentation).  Particle positions are never
-    interpolated."""
-    if np.isscalar(keys):
-        return float(keys)
-    keys = sorted((float(k[0]), np.asarray(k[1], float)) for k in keys)
-    if x <= keys[0][0]:
-        return keys[0][1]
-    for (x0, v0), (x1, v1) in zip(keys, keys[1:]):
-        if x <= x1:
-            s = smoothstep((x - x0) / (x1 - x0)) if x1 > x0 else 1.0
-            return v0 + (v1 - v0) * s
-    return keys[-1][1]
+    def __call__(self, x):
+        if self.f is None:
+            return self.const
+        if x <= self.x0:
+            return self.v0
+        if x >= self.x1:
+            return self.v1
+        return float(self.f(x))
 
 
 class Camera:
-    """Orbiting perspective camera.
+    """Perspective camera looking at ``target`` from ``distance`` kpc.
 
-    azimuth/elevation in degrees (azimuth measured in the x-y plane from +x,
-    elevation above the x-y plane), distance in kpc from ``target``.
+    azimuth is measured in the x-y plane from +x, elevation above the x-y plane (degrees).
+    ``fov_deg`` is the vertical field of view.
     """
 
     def __init__(self, target, distance, azimuth_deg, elevation_deg, fov_deg, width, height,
@@ -37,7 +45,6 @@ class Camera:
         self.distance = float(distance)
         az = np.radians(azimuth_deg)
         el = np.radians(elevation_deg)
-        # unit vector from target to camera
         d = np.array([np.cos(el) * np.cos(az), np.cos(el) * np.sin(az), np.sin(el)])
         self.position = self.target + self.distance * d
         fwd = -d
@@ -53,11 +60,11 @@ class Camera:
         self.R = np.vstack([right, up, fwd])       # world -> camera rows
         self.width = int(width)
         self.height = int(height)
-        self.fov = np.radians(fov_deg)            # vertical field of view
+        self.fov = np.radians(fov_deg)
         self.f = 0.5 * self.height / np.tan(0.5 * self.fov)
 
     def project(self, pos):
-        """Return pixel x, pixel y, depth (kpc) for world positions (N,3)."""
+        """Pixel x, pixel y (pixel centres at integer + 0.5) and depth in kpc."""
         pc = (np.asarray(pos, np.float64) - self.position) @ self.R.T
         z = pc[:, 2]
         with np.errstate(divide="ignore", invalid="ignore"):

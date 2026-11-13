@@ -5,12 +5,25 @@ the requested time is an exact multiple of the timestep.  Snapshot times are the
 always ``step * dt`` exactly: nothing is ever written between steps and nothing is
 interpolated.
 
-Render cadence is configured per time window ("dense output"), e.g.
+Render cadence is configured either per time window ("dense output"), e.g.
 
     render:
       every_myr: 10            # default cadence
       windows:                 # finer cadence in [start, end)
         - {start_gyr: 3.6, end_gyr: 4.2, every_myr: 1}
+
+or as a time remap for an edit: playback speed in Myr per frame as a function of
+simulation time, interpolated geometrically between keys, e.g.
+
+    render:
+      speed_myr_per_frame:     # [sim time (Gyr), Myr per frame]
+        - [0.00, 6]
+        - [0.18, 2]            # ramp into slow motion
+        - [0.40, 2]
+        - [0.55, 12]           # ramp back out
+
+Each frame advances by round(speed / dt) >= 1 whole steps, so a smooth ramp becomes a
+staircase of small speed changes, and every frame is still one saved snapshot.
 """
 import numpy as np
 
@@ -26,8 +39,26 @@ def to_steps(value_myr, dt_myr, what="time"):
     return ki
 
 
+def build_remap_steps(keys, dt_myr, n_steps):
+    """Steps for a speed curve ``[[t_gyr, myr_per_frame], ...]`` (geometric interpolation)."""
+    keys = sorted((float(t) * 1e3, float(v)) for t, v in keys)
+    if any(v <= 0 for _, v in keys):
+        raise ValueError("speed_myr_per_frame must be positive")
+    tk = np.array([k[0] for k in keys])
+    lv = np.log([k[1] for k in keys])
+    steps = [0]
+    s = 0
+    while s < n_steps:
+        sp = float(np.exp(np.interp(s * dt_myr, tk, lv)))
+        s = min(s + max(1, int(round(sp / dt_myr))), n_steps)
+        steps.append(s)
+    return np.array(steps, dtype=np.int64)
+
+
 def build_render_steps(render_cfg, dt_myr, n_steps):
     """Sorted unique array of steps at which render snapshots are written."""
+    if "speed_myr_per_frame" in render_cfg:
+        return build_remap_steps(render_cfg["speed_myr_per_frame"], dt_myr, n_steps)
     every = to_steps(float(render_cfg.get("every_myr", 10.0)), dt_myr, "render.every_myr")
     if every <= 0:
         raise ValueError("render.every_myr must be positive")
