@@ -1,0 +1,38 @@
+# The Checkpoint-1 test collision at final resolution (100,000 particles), to judge how
+# the footage will look.  Same galaxies, orbit and seed as test_collision_5k.yaml; only the
+# particle numbers and softening differ.  Generic test galaxies, not the MW-M31 scenario.
+name: preview_collision_100k
+seed: 20251113
+
+simulation:
+  t_end_gyr: 3.0
+  dt_myr: 1.0
+  softening_kpc: 0.2
+  solver: tree
+  theta: 0.6
+  leaf_size: 8
+
+output:
+  render:
+    every_myr: 10
+  checkpoint_every_myr: 500
+
+test_galaxy: &galaxy
+  vc_method: freeman
+  halo:  {mass: 50.0, scale_radius: 20.0, r_max: 150.0, n: 25000}
+  bulge: {mass: 1.0,  scale_radius: 0.6,  r_max: 10.0,  n: 5000}
+  disk:  {mass: 4.0,  scale_length: 3.0,  scale_height: 0.3, r_max: 24.0, toomre_q: 1.5, n: 20000}
+
+galaxies:
+  - name: A
+    model: *galaxy
+    spin: [0.0, 0.0, 1.0]
+  - name: B
+    model: *galaxy
+    spin_angles: {theta_deg: 45.0, phi_deg: 30.0}
+
+orbit:
+  type: kepler
+  separation_kpc: 100.0
+  pericenter_kpc: 12.0
+  eccentricity: 1.0
