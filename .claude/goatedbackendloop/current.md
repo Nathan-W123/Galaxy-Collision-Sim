@@ -1,5 +1,5 @@
 # Current task
-Status: building
+Status: done
 Request: Make the 100k collision render crisp and clear (user: "still very fuzzy i cant see great"), then implement the Phase 2 fix (disk heating) and continue Phase 2.
 ## Brief
 - Outcome: simulation frames where structure (spiral arms, bridges, tails, cores) reads sharply at 1080x1350.
@@ -9,10 +9,12 @@ Request: Make the 100k collision render crisp and clear (user: "still very fuzzy
 - Success: user picks a still variant; full clip re-rendered in that look passes render.verify; fine structure visible at 100% zoom.
 - Then Phase 2: isolated MW model at final N for 4 Gyr -> choose disk-heating fix (particle allocation / DM softening / dt) -> sources + params -> MW-M31 run.
 ## Progress
-- [ ] point layer + clarity in renderer
-- [ ] still comparison (3 variants, 2 moments) shown to user, pick
-- [ ] re-render 100k clip, verify
+- [x] point layer + clarity in renderer
+- [x] still comparison (3 variants, 2 moments) shown to user, pick -> B (D-04)
+- [x] re-render 100k clip in look B; render.verify ALL PASS (min re-render PSNR 41.4 dB); consecutive frames coherent (no twinkle)
 - [ ] Phase 2
 ## Observations
 - 2026-11-13 user rejected two clips on look; switching to stills-first (L-01)
+- 2026-11-13 stills comparison -> user picked B in one round, no re-render wasted (L-01 helped)
+- 2026-11-13 fine point detail raises H.264 bitrate (20 s clip = 36 MB at crf 14); fine for masters, revisit for LinkedIn export
 ## Handoff

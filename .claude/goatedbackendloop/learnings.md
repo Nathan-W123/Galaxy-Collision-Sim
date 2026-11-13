@@ -9,7 +9,7 @@ Sessions: 0 · Last consolidated: never
 - Adjustment: for any visual deliverable, render 2-3 labelled still variants of the same frame at full resolution, show them, and get the user's pick before rendering the full clip.
 - Scope: workflow
 - Status: provisional
-- Outcomes:
+- Outcomes: +2026-11-13 helped (user picked B from stills in one round)
 ## Retired
 ## Changelog
 - 2026-11-13 · created; added L-01

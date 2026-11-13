@@ -1,0 +1,40 @@
+# Disk-heating test (Phase 2): MW share (40k) of a 100k budget, current split 50/10/40.
+# Provisional MW-like model; not the final MW parameters.
+name: heating_a_100k_default
+seed: 11
+simulation:
+  t_end_gyr: 2.0
+  dt_myr: 1.0
+  softening_kpc: 0.2
+  solver: tree
+  theta: 0.6
+  leaf_size: 8
+output:
+  render:
+    every_myr: 100
+  checkpoint_every_myr: 500
+galaxies:
+- name: MW
+  spin:
+  - 0.0
+  - 0.0
+  - 1.0
+  model:
+    vc_method: freeman
+    halo:
+      mass: 100.0
+      scale_radius: 30.0
+      r_max: 300.0
+      n: 20000
+    bulge:
+      mass: 1.0
+      scale_radius: 0.7
+      r_max: 10.0
+      n: 4000
+    disk:
+      mass: 5.0
+      scale_length: 2.6
+      scale_height: 0.3
+      r_max: 25.0
+      toomre_q: 1.5
+      n: 16000
