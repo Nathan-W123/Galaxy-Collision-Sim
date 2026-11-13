@@ -1,10 +1,11 @@
 # Snapshot schedule for the Checkpoint-1 preview (time remap chosen from the coarse run).
-# Coarse run (every 10 Myr) found: first pericentre t = 0.27 Gyr (18 kpc), second passage
-# t = 1.61 Gyr, centres merged (< 3 kpc) from t = 1.91 Gyr.
+#   python -m nbody.analysis output/runs/test_collision_5k_coarse
+# found: first pericentre t = 0.26 Gyr (16 kpc); second passage t = 1.50 Gyr;
+# centres merged (< 3 kpc apart for good) from t = 1.82 Gyr.
 # Slow motion = more snapshots per Gyr inside these windows; one snapshot per frame.
 render:
   every_myr: 10            # normal speed: 10 Myr per frame (0.3 Gyr per second at 30 fps)
   windows:
-    - {start_gyr: 0.15, end_gyr: 0.45, every_myr: 2}   # first passage: 5x slow motion
-    - {start_gyr: 1.55, end_gyr: 1.95, every_myr: 2}   # second passage + coalescence
+    - {start_gyr: 0.14, end_gyr: 0.44, every_myr: 2}   # first passage: 5x slow motion
+    - {start_gyr: 1.40, end_gyr: 1.90, every_myr: 2}   # second passage + coalescence
 checkpoint_every_myr: 500
