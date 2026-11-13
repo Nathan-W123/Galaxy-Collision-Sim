@@ -21,9 +21,13 @@ How a frame is drawn
    stays bounded; the levels are upsampled and summed.  Image values are surface
    densities (Msun / kpc^2), independent of camera distance.
 4. Log-density tone mapping with a filmic (ACES-style) curve; colour by galaxy of
-   origin (bulges paler); highlights desaturate towards white.
-5. Bloom from highlights only, at three radii; screen-blended over a dark background.
-6. Overlay (time from the snapshot, legend, scale bar, provenance tag), see overlay.py.
+   origin (bulges paler); highlights desaturate towards white.  Optional "clarity"
+   (unsharp mask on the tone-mapped light) sharpens arm and tail edges.
+5. Optional point layer: every star particle is also drawn as a crisp, near
+   pixel-sized point (star-field texture), tone-mapped as stars per pixel and
+   screen-blended with the smooth light.  This gives the eye real detail to lock onto.
+6. Bloom from highlights only, at three radii; screen-blended over a dark background.
+7. Overlay (time from the snapshot, legend, scale bar, provenance tag), see overlay.py.
 
 Writes ``frames_manifest.csv`` (frame -> snapshot file, step, time, energy, plus the
 simulation's git commit and parameter-file hash) next to the frames.
@@ -69,6 +73,9 @@ DEFAULT_STYLE = {
     ],
     "bloom": {"threshold": 0.45, "strength": 0.55,
               "radii": [0.004, 0.012, 0.035], "weights": [0.5, 0.32, 0.18]},
+    "diffuse_weight": 1.0,      # brightness multiplier of the smooth (kernel) light
+    "clarity": {"amount": 0.0, "radius_px": 6.0},
+    "points": {"enabled": False, "sigma_px": 0.6, "gain": 1.5, "weight": 1.0},
     "background": [7, 9, 15],
     "vignette": 0.18,
     "dither": True,
@@ -174,7 +181,8 @@ class Renderer:
         self.mass = st["mass"]
         self.galaxy_names = [str(x) for x in st["galaxy_names"]]
         self.style = {**DEFAULT_STYLE, **cfg.get("style", {})}
-        self.style["bloom"] = {**DEFAULT_STYLE["bloom"], **cfg.get("style", {}).get("bloom", {})}
+        for key in ("bloom", "clarity", "points"):
+            self.style[key] = {**DEFAULT_STYLE[key], **cfg.get("style", {}).get(key, {})}
         stars = np.isin(self.ptype, [PTYPE_DISK, PTYPE_BULGE])
         if self.style.get("show_dark_matter", False):
             stars[:] = True
@@ -183,6 +191,7 @@ class Renderer:
         # channel = 2 * galaxy + (1 if bulge else 0)
         self.chan = (2 * self.galaxy[self.sel].astype(np.int64)
                      + (self.ptype[self.sel] == PTYPE_BULGE).astype(np.int64))
+        self.m_ref = float(np.median(self.mass[self.sel]))
         self.W = int(cfg["width"])
         self.H = int(cfg["height"])
         if self.W % 2 or self.H % 2:
@@ -254,19 +263,38 @@ class Renderer:
             if s.any():
                 deposit_gaussian(px[s] / f, py[s] / f, sig[s] / f, w[s] / (f * f), ch[s], buf, 12)
             acc = buf if acc is None else upsample2(acc, hL, wL) + buf
-        return downsample(acc, ss)          # (C, H, W) surface densities
+        dens = downsample(acc, ss)          # (C, H, W) surface densities
+        pts = None
+        P = st["points"]
+        if P.get("enabled", False):
+            buf = np.zeros((C, Hs, Ws))
+            sp = np.full(px.size, float(P["sigma_px"]) * ss)
+            deposit_gaussian(px, py, sp, m / self.m_ref, ch, buf, 12)
+            pts = downsample(buf, ss) * (ss * ss)   # star particles per output pixel
+        return dens, pts
 
-    def shade(self, dens, frame):
+    def shade(self, dens, frame, pts=None):
         st = self.style
         cols = np.asarray(st["colors"], float)[: self.ng].reshape(-1, 3)        # (C, 3)
         D = dens.sum(0)
         lo, hi = float(st["density_lo"]), float(st["density_hi"])
         Lg = np.log1p(np.maximum(D, 0) / lo) / np.log1p(hi / lo)
         T = aces(float(st["exposure"]) * Lg)
+        cl = st["clarity"]
+        if float(cl["amount"]) > 0:
+            T = np.clip(T + float(cl["amount"]) * (T - gaussian_filter(T, float(cl["radius_px"]))), 0, 1)
         hue = np.einsum("chw,ck->hwk", dens, cols) / np.maximum(D, 1e-30)[..., None]
         rgb = hue * T[..., None]
         s = (np.clip((T - 0.55) / 0.45, 0, 1) ** 1.5 * float(st["highlight_desat"]))[..., None]
-        rgb = rgb * (1 - s) + T[..., None] * s
+        rgb = (rgb * (1 - s) + T[..., None] * s) * float(st["diffuse_weight"])
+        if pts is not None:
+            P = st["points"]
+            n = pts.sum(0)
+            Tp = 1.0 - np.exp(-float(P["gain"]) * n)
+            hp = np.einsum("chw,ck->hwk", pts, cols) / np.maximum(n, 1e-30)[..., None]
+            sp = (np.clip((Tp - 0.6) / 0.4, 0, 1) ** 1.5 * float(st["highlight_desat"]))[..., None]
+            prgb = (hp * Tp[..., None] * (1 - sp) + Tp[..., None] * sp) * float(P["weight"])
+            rgb = 1 - (1 - np.clip(rgb, 0, 1)) * (1 - np.clip(prgb, 0, 1))
         # bloom from highlights, computed at quarter resolution
         b = st["bloom"]
         if float(b["strength"]) > 0:
@@ -307,8 +335,8 @@ class Renderer:
         pos = snap["pos"][self.sel].astype(np.float64)
         t_gyr = float(snap["time_gyr"])
         cam = self.camera_for(frame, t_gyr, self.ss)
-        dens = self.splat(pos, cam)
-        img = self.shade(dens, frame)
+        dens, pts = self.splat(pos, cam)
+        img = self.shade(dens, frame, pts)
         im = Image.fromarray((img * 255 + 0.5).astype(np.uint8), "RGB")
         ov = dict(self.cfg.get("overlay", {}))
         ov["_bg"] = self.style["background"]
