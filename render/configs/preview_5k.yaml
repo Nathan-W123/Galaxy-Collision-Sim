@@ -2,8 +2,8 @@
 run: output/runs/test_collision_5k
 out: output/renders/preview_5k
 video_name: preview_5k_collision.mp4
-width: 540
-height: 675           # 4:5
+width: 544
+height: 680           # 4:5 (even dimensions for yuv420p)
 fps: 30
 crf: 18
 frames:

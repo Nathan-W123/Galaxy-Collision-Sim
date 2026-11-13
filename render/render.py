@@ -98,6 +98,8 @@ class Renderer:
         self.sel = np.nonzero(stars)[0]
         self.W = int(cfg["width"])
         self.H = int(cfg["height"])
+        if self.W % 2 or self.H % 2:
+            raise ValueError("width and height must be even (H.264 yuv420p)")
         self.fps = int(cfg.get("fps", 30))
         self.out_dir = _abs(cfg["out"])
         self.frames = self.plan_frames()
