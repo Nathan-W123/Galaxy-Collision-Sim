@@ -1,0 +1,38 @@
+# 5,000-particle test collision: two identical Milky-Way-like disks on a parabolic
+# orbit.  Generic test galaxy, not the MW-M31 scenario (that is Phase 2).
+# Units: kpc, km/s, 1e10 Msun.  Component masses are the realised particle masses.
+name: test_collision_5k
+seed: 20251113
+
+simulation:
+  t_end_gyr: 3.0
+  dt_myr: 1.0
+  softening_kpc: 0.4
+  solver: tree
+  theta: 0.6
+  leaf_size: 8
+
+output:
+  render:
+    every_myr: 10
+  checkpoint_every_myr: 500
+
+test_galaxy: &galaxy
+  vc_method: freeman
+  halo:  {mass: 50.0, scale_radius: 20.0, r_max: 150.0, n: 1000}
+  bulge: {mass: 1.0,  scale_radius: 0.6,  r_max: 10.0,  n: 200}
+  disk:  {mass: 4.0,  scale_length: 3.0,  scale_height: 0.3, r_max: 24.0, toomre_q: 1.5, n: 1300}
+
+galaxies:
+  - name: A
+    model: *galaxy
+    spin: [0.0, 0.0, 1.0]                     # prograde w.r.t. the orbit
+  - name: B
+    model: *galaxy
+    spin_angles: {theta_deg: 45.0, phi_deg: 30.0}
+
+orbit:
+  type: kepler
+  separation_kpc: 100.0
+  pericenter_kpc: 12.0
+  eccentricity: 1.0

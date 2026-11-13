@@ -1,0 +1,8 @@
+# Pinned versions used to produce and test the footage (Python 3.13).
+numpy==2.5.4
+numba==0.68.1
+llvmlite==0.50.0
+scipy==1.18.1
+PyYAML==6.0.3
+pillow==13.0.0
+pytest==9.2.0

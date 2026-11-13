@@ -1,0 +1,28 @@
+# One isolated test galaxy (5,000 particles) evolved for 2 Gyr.
+# Used by tests/test_isolated_disk.py: the disk must stay a stable disk.
+# The galaxy is halo-dominated (Efstathiou-Lake-Kalnajs X = vmax / sqrt(G M_d / h) ~ 1.5 > 1.1)
+# so that it is not bar-unstable: any change seen here is numerical, not a physical bar.
+name: test_isolated_disk
+seed: 7
+
+simulation:
+  t_end_gyr: 2.0
+  dt_myr: 1.0
+  softening_kpc: 0.5
+  solver: tree
+  theta: 0.6
+  leaf_size: 8
+
+output:
+  render:
+    every_myr: 50
+  checkpoint_every_myr: 1000
+
+galaxies:
+  - name: A
+    model:
+      vc_method: freeman
+      halo:  {mass: 50.0, scale_radius: 12.0, r_max: 150.0, n: 3500}
+      bulge: {mass: 0.8,  scale_radius: 0.6,  r_max: 10.0,  n: 200}
+      disk:  {mass: 2.0,  scale_length: 3.0,  scale_height: 0.3, r_max: 24.0, toomre_q: 1.5, n: 1300}
+    spin: [0.0, 0.0, 1.0]

@@ -1,0 +1,31 @@
+# Low-resolution preview of the 5,000-particle test collision (Checkpoint 1).
+run: output/runs/test_collision_5k
+out: output/renders/preview_5k
+video_name: preview_5k_collision.mp4
+width: 540
+height: 675           # 4:5
+fps: 30
+crf: 18
+frames:
+  start_gyr: 0.0
+  end_gyr: 3.0
+camera:                # presentation only: the camera moves, the particles come from snapshots
+  key: frame
+  target: [0.0, 0.0, 0.0]
+  distance_kpc: [[0, 260], [120, 170], [600, 150]]
+  elevation_deg: [[0, 55], [600, 35]]
+  azimuth_deg: -60
+  azimuth_rate_deg_per_frame: 0.06
+  fov_deg: 40
+style:
+  smooth_kpc: 0.45
+  density_lo: 2.0e5
+  density_hi: 3.0e9
+  glow: [[1.2, 0.35], [5.0, 0.22]]
+overlay:
+  time: true
+  time_format: "t = {t:.2f} Gyr"
+  scale_bar: true
+  label: "N-body simulation"
+  caption: "test galaxies, 5,000 particles"
+  credit: "stars only; dark matter hidden"

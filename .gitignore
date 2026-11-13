@@ -1,0 +1,14 @@
+# Rendered video, frames and simulation snapshots never go in git
+output/
+*.mp4
+*.png
+*.npz
+*.wav
+*.srt.tmp
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.nbi
+*.nbc
+media/
