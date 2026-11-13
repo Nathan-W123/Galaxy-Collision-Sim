@@ -2,7 +2,7 @@
 
 Every number used in the simulation and (later) on screen is listed here with its source.
 Section 1 maps the parameter file `scenarios/mw_m31_vdm2012.yaml` to the papers. Section 2 lists
-what we assumed because no source gives it. Section 3 holds the full verification notes:
+what we assumed because no source gives it. Section 3 compares our run with the published one. Section 4 holds the full verification notes:
 exact quotes, locations in the papers and confidence codes, checked against full texts on
 2026-11-13.
 
@@ -31,7 +31,28 @@ exact quotes, locations in the papers and confidence codes, checked against full
 * **Resolution:** 100,000 particles (Paper III used about 3.2 million), Plummer softening 0.2 kpc, timestep 1 Myr.
 * **Consequence:** our run is one realisation of the 2012 canonical scenario. It is not a prediction. The 2019 and 2025 results make a merger within 10 Gyr roughly a coin flip, and the script must say so.
 
-## 3. Verification notes
+## 3. Our run compared with the published result
+
+The comparison uses the final-resolution coarse run `mw_m31_vdm2012_coarse` (100,000
+particles, snapshots every 20 Myr). Its energy drift over 10 Gyr was 0.53 %.
+
+| Event | Our run | vdM2012 III canonical N-body | vdM2012 III Monte Carlo |
+|---|---|---|---|
+| First pericentre | 3.72 Gyr, 25 kpc | 3.97 Gyr, 35.0 kpc | 3.87 (+0.42/−0.32) Gyr, 31.0 (+38.0/−19.8) kpc |
+| First apocentre | 4.36 Gyr, 137 kpc | 4.79 Gyr, 171.9 kpc | – |
+| Merger (centres within 5 kpc from then on) | 5.56 Gyr | 6.29 Gyr | 5.86 (+1.61/−0.72) Gyr |
+
+Our first passage is somewhat closer and earlier than in the canonical run, so dynamical
+friction brings the galaxies together sooner. All three times fall inside the published
+Monte Carlo ranges. Differences we know of:
+
+* no 1 Gyr isolated relaxation;
+* the halo truncation at 600 kpc;
+* no black holes;
+* Toomre-Q disk kinematics;
+* about 30 times fewer particles.
+
+## 4. Verification notes
 
 ### Full verification record
 
@@ -52,7 +73,7 @@ Verified 2026-11-13. I read the full text of all four papers:
 
 ---
 
-## 1. van der Marel et al. 2012a (Paper II)
+### 4.1 van der Marel et al. 2012a (Paper II)
 
 **Citation.** van der Marel, R. P., Fardal, M., Besla, G., Beaton, R. L., Sohn, S. T., Anderson, J., Brown, T., & Guhathakurta, P. 2012. "The M31 Velocity Vector. II. Radial Orbit toward the Milky Way and Implied Local Group Mass." *The Astrophysical Journal*, 753(1), 8.
 
@@ -96,7 +117,7 @@ Solar parameters: "R0 = 8.29 ± 0.16 kpc and V0 = 239 ± 5 km/s. These are the v
 
 ---
 
-## 2. van der Marel et al. 2012b (Paper III)
+### 4.2 van der Marel et al. 2012b (Paper III)
 
 **Citation.** van der Marel, R. P., Besla, G., Cox, T. J., Sohn, S. T., & Anderson, J. 2012. "The M31 Velocity Vector. III. Future Milky Way–M31–M33 Orbital Evolution, Merging, and Fate of the Sun." *The Astrophysical Journal*, 753(1), 9.
 
@@ -145,7 +166,7 @@ Solar parameters: "R0 = 8.29 ± 0.16 kpc and V0 = 239 ± 5 km/s. These are the v
 
 ---
 
-## 3. van der Marel et al. 2019
+### 4.3 van der Marel et al. 2019
 
 **Citation.** van der Marel, R. P., Fardal, M. A., Sohn, S. T., Patel, E., Besla, G., del Pino, A., Sahlmann, J., & Watkins, L. L. 2019. "First Gaia Dynamics of the Andromeda System: DR2 Proper Motions, Orbits, and Rotation of M31 and M33." *The Astrophysical Journal*, 872(1), 24.
 
@@ -183,7 +204,7 @@ Solar parameters: "R0 = 8.29 ± 0.16 kpc and V0 = 239 ± 5 km/s. These are the v
 
 ---
 
-## 4. Sawala et al. 2025
+### 4.4 Sawala et al. 2025
 
 **Citation (published).** Sawala, T., Delhomelle, J., Deason, A. J., Frenk, C. S., Häkkinen, J., Johansson, P. H., Keitaanranta, A., Rawlings, A., & Wright, R. 2025. "No certainty of a Milky Way–Andromeda collision." *Nature Astronomy*, 9(8), 1206–1217.
 
@@ -228,7 +249,7 @@ Solar parameters: "R0 = 8.29 ± 0.16 kpc and V0 = 239 ± 5 km/s. These are the v
 
 ---
 
-## Discrepancies and caveats
+### 4.5 Discrepancies and caveats
 
 1. **The tangential velocity is the decisive input, and it has moved.**
    - vdM2012: Vtan = 17.0 km/s (1σ ≤ 34.3). This came from HST combined with satellite kinematics.

@@ -12,11 +12,13 @@ Request: Phase 2 with the disk-heating fix ("implement the fix to phase 2"), in 
 - [x] 5k orbit checks: A first pericentre 3.72 Gyr / 24 kpc (pub. 3.87 / 31), merged ~5.6 Gyr (pub. 5.86); B 4.34 Gyr / 116 kpc (pub. ~4.5 / ~130), merger starts ~10 Gyr
 - [x] user: orbit = vdM2012 only (D-05); split 55/5/40 (D-06)
 - [x] sources.md (parameter mapping, assumptions, full verification notes)
-- [~] coarse run mw_m31_vdm2012_coarse (100k, 10 Gyr, every 20 Myr) - started at commit 3a70b7a, ETA ~80 min
-- [~] prograde vs retrograde runs (20k, 1.6 Gyr, shared remap) - running
-- [ ] events -> remap (approach ~8 s for the hook, slow first passage + coalescence) -> dense rerun (~80 min) -> render look B -> verify
-- [ ] comparison panels render + verify + vstack composite
+- [x] coarse run (82 min, dE 0.53 %): pericentre 3.72 Gyr / 25 kpc, apocentre 4.36 / 137, 2nd passage 5.22, merged 5.56 Gyr
+- [x] prograde vs retrograde: both panels verified, stacked composite sent
+- [x] remap scenarios/schedules/mw_m31.yaml (1161 frames, 38.7 s); camera from measured separation; framing checked on coarse stills
+- [~] dense rerun started at commit 6be176a (~80 min)
+- [ ] render look B (black point 5e6) -> verify -> Checkpoint 2
 - [ ] README Phase 2 commands, Checkpoint 2 report
 ## Observations
 - 2026-11-13 heating hypothesis (halo particle noise dominates) only partly right: 2.8x lighter halo particles -> 1.4x lower rate; bars dominate. Testing before committing to 200k saved a 2+ h run that would have failed energy.
+- 2026-11-13 framing stills on the coarse run caught clipped tails (3.9 Gyr) and a frame-filling remnant (5.6 Gyr) before the 80-min dense run was rendered
 ## Handoff
