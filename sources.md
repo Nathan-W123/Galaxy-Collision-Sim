@@ -2,7 +2,7 @@
 
 Every number used in the simulation and (later) on screen is listed here with its source.
 Section 1 maps the parameter file `scenarios/mw_m31_vdm2012.yaml` to the papers. Section 2 lists
-what we assumed because no source gives it. Section 3 compares our run with the published one. Section 4 holds the full verification notes:
+what we assumed because no source gives it. Section 3 compares our run with the published one. Section 4 holds the full verification notes for the simulation; section 5 lists the script's sources with the full fact-check record:
 exact quotes, locations in the papers and confidence codes, checked against full texts on
 2026-11-13.
 
@@ -302,3 +302,384 @@ Solar parameters: "R0 = 8.29 ± 0.16 kpc and V0 = 239 ± 5 km/s. These are the v
     - The 2% within 5 Gyr figure does not appear in Sawala's text. It is read from Fig. 3 and confirmed only by a press release.
     - vdM2019 gives no merger time and no explicit M31 Vrad.
     - vdM2012 II defers disk orientations to Paper III.
+
+## 5. Script sources (keys used in `script.md`)
+
+Fact-checked against primary or authoritative sources on 2026-11-14. Quotes, the safe
+wordings and what must be labelled speculative are in the record below.
+
+| Key | Source | Supports |
+|---|---|---|
+| S1 | NASA Hubble Mission Team / STScI, news release STScI-2012-20, 31 May 2012, "NASA's Hubble Shows Milky Way is Destined for Head-On Collision". https://science.nasa.gov/missions/hubble/nasas-hubble-shows-milky-way-is-destined-for-head-on-collision/ | stars "will not collide"; Andromeda "2.5 million light-years away". The release's "certainty" of a collision is superseded by S3 |
+| S2 | van der Marel et al. 2012, ApJ 753, 8 (Paper II). DOI 10.1088/0004-637X/753/1/8 | D = 770 ± 40 kpc (about 2.5 million light-years) |
+| S3 | Sawala et al. 2025, Nature Astronomy 9, 1206–1217. DOI 10.1038/s41550-025-02563-1 | "probability of close to 50% that there will be no Milky Way–Andromeda merger during the next 10 billion years" |
+| S4 | van der Marel et al. 2012, ApJ 753, 9 (Paper III). DOI 10.1088/0004-637X/753/1/9 | the simulated scenario (sections 1–3 of this file) |
+| S5 | NASA GSFC, Sun Fact Sheet (radius 695,700 km). https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html | Sun diameter 1.39 million km |
+| S6 | NASA, "What is a light-year?" (Proxima Centauri 4.25 ly; 9.46 trillion km per ly). https://science.nasa.gov/exoplanets/what-is-a-light-year/ | Proxima about 40 trillion km. Our arithmetic: 4.02×10^13 km / 1.39×10^6 km = 2.9×10^7, so a 1 mm Sun puts Proxima about 29 km away |
+| S7 | Barnes & Hut 1986, Nature 324, 446–449. DOI 10.1038/324446a0 | direct summation grows as N^2; the tree method as N log N |
+| S8 | Dehnen & Read 2011, Eur. Phys. J. Plus 126, 55. DOI 10.1140/epjp/i2011-11055-3, arXiv:1105.1082 | opening criterion θ w < r (cell size / distance < θ); O(N ln N) vs O(N^2) |
+| S9 | Springel 2005, MNRAS 364, 1105. DOI 10.1111/j.1365-2966.2005.09655.x | direct-summation N^2 cost |
+| S10 | Guth 2007, J. Phys. A 40, 6811. DOI 10.1088/1751-8113/40/25/S25, arXiv:hep-th/0702178 | eternal inflation; false vacuum keeps growing; understanding "remains incomplete" |
+| S11 | Aguirre & Johnson 2011, Rep. Prog. Phys. 74, 074901. DOI 10.1088/0034-4885/74/7/074901, arXiv:0908.4105 | our observable universe inside one bubble; bubbles collide; walls approximated as on the light cone; observability needs "good fortune" |
+| S12 | Feeney, Johnson, Mortlock & Peiris 2011, PRL 107, 071301. DOI 10.1103/PhysRevLett.107.071301, arXiv:1012.1995 | azimuthally symmetric disc on the CMB; WMAP 7-yr: N̄s < 1.6 at 68 % CL, "do not warrant augmenting ΛCDM with bubble collisions" |
+| S13 | Feeney et al. 2011, PRD 84, 043507. DOI 10.1103/PhysRevD.84.043507, arXiv:1012.3667 | "confined to a disc on the sky" |
+| S14 | Feeney et al. 2013, PRD 88, 043012. DOI 10.1103/PhysRevD.88.043012, arXiv:1210.2725 | WMAP 7-yr: fewer than 4.0 detectable collisions at 95 %; latest template search found (no published Planck-data disc search) |
+| S15 | Planck Collaboration 2020, A&A 641, A4 (Planck 2018 IV). DOI 10.1051/0004-6361/201833881; map `COM_CMB_IQU-smica_2048_R3.00_full.fits` via NASA/IPAC IRSA (DOI 10.26131/IRSA558) | the CMB map shown. Credit: ESA/Planck Collaboration. "This research has made use of the NASA/IPAC Infrared Science Archive, which is funded by the National Aeronautics and Space Administration and operated by the California Institute of Technology." |
+| S16 | Markkanen, Rajantie & Stopyra 2018, Front. Astron. Space Sci. 5, 40. DOI 10.3389/fspas.2018.00040, arXiv:1809.06923 | true-vacuum bubbles expand at (nearly) light speed. "No warning" is our inference (no source states it), so it is narrated as speculation |
+
+### Full fact-check record (Phase 3)
+
+Checked 2026-11-14. Every quote below was taken from the source text fetched during this check: arXiv PDF full texts converted with pdftotext, publisher or agency HTML pages, arXiv abstract pages, or Crossref/INSPIRE metadata. Ellipses (...) mark omitted text. Hyphenation and line breaks from PDF extraction have been rejoined. Where I could not get the original text (paywalled), the entry says so and gives the source actually used.
+
+Verdict key: **SUPPORTED**, **PARTLY** (the source supports a weaker or narrower wording), **NOT SUPPORTED**, **NOT FOUND** (no verifiable source located).
+
+---
+
+### A. Stars almost never collide when galaxies merge
+
+#### A1. Stars will not / almost never collide during the Milky Way-Andromeda merger
+
+**Verdict: SUPPORTED** by the NASA/STScI release. Neither van der Marel et al. 2012 (Paper III) nor Cox & Loeb 2008 makes this statement explicitly; I searched both full texts for "collide/collision" and found nothing about star-star collisions.
+
+Quote (NASA Hubble Mission Team, 31 May 2012):
+> "Although the galaxies will plow into each other, stars inside each galaxy are so far apart that they will not collide with other stars during the encounter. However, the stars will be thrown into different orbits around the new galactic center."
+
+Citation: NASA Hubble Mission Team / STScI, "NASA's Hubble Shows Milky Way is Destined for Head-On Collision", news release STScI-2012-20, 31 May 2012. https://science.nasa.gov/missions/hubble/nasas-hubble-shows-milky-way-is-destined-for-head-on-collision/ (STScI listing: https://www.stsci.edu/contents/news-releases/2012/news-2012-20, which gives "Release ID: 2012-20" and "May 31, 2012"). Science credits on the release: R. van der Marel, S. T. Sohn, J. Anderson (STScI), G. Besla (Columbia).
+
+Science papers behind the release (checked, but they do not contain the star-collision sentence):
+- van der Marel, R. P., Besla, G., Cox, T. J., Sohn, S. T., & Anderson, J. 2012, "The M31 Velocity Vector. III. Future Milky Way-M31-M33 Orbital Evolution, Merging, and Fate of the Sun", ApJ 753, 9. DOI 10.1088/0004-637X/753/1/9. arXiv:1205.6865.
+- Cox, T. J. & Loeb, A. 2008, "The collision between the Milky Way and Andromeda", MNRAS 386, 461-474. DOI 10.1111/j.1365-2966.2008.13048.x. arXiv:0705.1170.
+
+Caveat for the script: the same 2012 release says NASA could "predict with certainty" the collision. Sawala et al. 2025 (see G) now puts the merger probability near 50%. Do not say the collision is certain.
+
+**Safe narration:** "When galaxies merge, the stars are so far apart that they almost never hit each other. Gravity reshuffles their orbits instead."
+(NASA says "will not collide". "Almost never" is the more careful wording and is safe.)
+
+#### A2. Numbers for the scale analogy
+
+**Sun's diameter: SUPPORTED**
+> NASA Sun Fact Sheet: "Volumetric mean radius (km) 695,700." (Sun column)
+>
+> NASA Sun facts page: "Its diameter is about 865,000 miles (1.4 million kilometers)."
+
+Citations: Williams, D. R. (NASA GSFC/NSSDCA), "Sun Fact Sheet", last updated 9 May 2024, https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html ; NASA Science, "Sun: Facts", https://science.nasa.gov/sun/facts/
+The diameter is 2 x 695,700 = 1,391,400 km (my arithmetic), which matches NASA's "1.4 million kilometers".
+
+**Distance to Proxima Centauri: SUPPORTED** (NASA, ESO, ESA/Hubble)
+> NASA, "What is a light-year?": "Keep going to Proxima Centauri, our nearest neighboring star, and plan on arriving in 4.25 years at light speed."
+>
+> Same page: "The nearest-known exoplanet is a small, probably rocky planet orbiting Proxima Centauri – the next star over from Earth. A little more than four light-years away, or 24 trillion miles."
+>
+> Same page: "Light zips through interstellar space at 186,000 miles (300,000 kilometers) per second and 5.88 trillion miles (9.46 trillion kilometers) per year."
+>
+> ESO eso1629 (24 Aug 2016): "Just over four light-years from the Solar System lies a red dwarf star that has been named Proxima Centauri as it is the closest star to Earth apart from the Sun."
+>
+> ESA/Hubble potw1343a: "Proxima Centauri lies in the constellation of Centaurus (The Centaur), just over four light-years from Earth."
+
+Citations: NASA Science / Exoplanet Exploration, "What is a light-year?", https://science.nasa.gov/exoplanets/what-is-a-light-year/ ; ESO press release eso1629, "Planet Found in Habitable Zone Around Nearest Star", https://www.eso.org/public/news/eso1629/ ; ESA/Hubble Picture of the Week potw1343a, "New shot of Proxima Centauri, our nearest neighbour", https://esahubble.org/images/potw1343a/
+
+The distance in km comes from my arithmetic using NASA's numbers: 4.25 ly x 9.46e12 km/ly = **4.02e13 km (about 40 trillion km)**. NASA's "24 trillion miles" converts to 3.86e13 km (1 mile = 1.609344 km). A rounded "about 40 trillion km" is safe.
+
+**Typical distance between stars: PARTLY** (authoritative, but described by the source itself as rough)
+> NRAO "Ask an Astronomer" (J. Mangum): "I think what you are asking for is the average distance between any two stars in our galaxy. That number turns out to be about 5 light years, which is very close to the 4 light year distance between our Sun and Alpha Centauri."
+>
+> NRAO follow-up (18 Feb 2022): "I don't believe that there is a standard reference for the average distance between stars in the Milky Way galaxy as this distance is a rather subjective estimate. ... the average distance between stars in the Milky Way is about 5 light years. Note, though, that this estimate has a large uncertainty."
+>
+> OpenStax Astronomy 2e, Sect. 1.6: "Within a sphere 10 light-years in radius centered on the Sun, we find roughly ten stars."
+
+Citations: National Radio Astronomy Observatory, "What is the Average Distance Between Stars in our Galaxy?", https://public.nrao.edu/ask/what-is-the-average-distance-between-stars-in-our-galaxy/ ; NRAO, "Is There a Reference for Average Distance Between Stars in the Milky Way?", https://public.nrao.edu/ask/is-there-a-reference-for-average-distance-between-stars-in-the-milky-way/ ; Fraknoi, A., Morrison, D. & Wolff, S., *Astronomy 2e*, OpenStax, Houston TX, 9 Mar 2022, Sect. 1.6 "A Tour of the Universe", https://openstax.org/books/astronomy-2e/pages/1-6-a-tour-of-the-universe
+
+**Scale analogy (MY CALCULATION, not from a source)**
+Inputs: Sun diameter D = 1,391,400 km (NASA fact sheet radius x 2). Proxima distance d = 4.25 ly x 9.46e12 km/ly = 4.0205e13 km (NASA).
+Ratio d/D = 4.0205e13 / 1.3914e6 = **2.89e7** (the distance is about 29 million Sun-diameters).
+
+| Sun shrunk to | Proxima at the same scale | With NASA's "24 trillion miles" (ratio 2.78e7) | "Typical" 5 ly spacing (NRAO; ratio 3.40e7) |
+|---|---|---|---|
+| 1 mm grain of sand | 2.89e7 x 1 mm = 28.9 km | 27.8 km | 34 km |
+| 40 mm table-tennis ball (40 mm assumed, not checked) | 2.89e7 x 40 mm = 1,156 km | 1,110 km | 1,360 km |
+
+Check using NASA's rounded figures (1.4 million km, 4.25 ly): 4.02e13 / 1.4e6 = 2.87e7, i.e. 28.7 km at the 1 mm scale.
+
+**Safe narration:** "Shrink the Sun to a grain of sand. The nearest star would be another grain about 30 kilometres away." Or: "Make the Sun a ping-pong ball, and the nearest star is a second ball more than a thousand kilometres away." On screen: "Scale: Sun 1.39 million km across; Proxima Centauri 4.25 light-years (about 40 trillion km). Sources: NASA."
+
+---
+
+### B. N-body method
+
+#### B3. Barnes & Hut 1986 citation and opening criterion
+
+**Citation: SUPPORTED** (Nature article page and its citation metadata)
+Barnes, J. & Hut, P. 1986, "A hierarchical O(N log N) force-calculation algorithm", *Nature* 324 (6096), 446-449. Published 4 December 1986. DOI 10.1038/324446a0. https://www.nature.com/articles/324446a0 . No arXiv version (it predates arXiv). Authors' affiliation: The Institute for Advanced Study, Princeton.
+
+Abstract (Nature page):
+> "Until recently the gravitational N-body problem has been modelled numerically either by direct integration, in which the computation needed increases as N^2, or by an iterative potential method in which the number of operations grows as N log N. Here we describe a novel method of directly calculating the force on N bodies that grows only as N log N. The technique uses a tree-structured hierarchical subdivision of space into cubic cells, each of which is recursively divided into eight subcells whenever more than one particle is found to occupy the same cell."
+
+**Opening criterion: PARTLY.** The criterion is supported, but not quoted from the original. The 1986 full text is paywalled and I could not check its wording or notation. The criterion is confirmed by a peer-reviewed review:
+> Dehnen & Read 2011, Sect. 3.5.1: "The gravity at any position x from all the particles within tree cell A is then simply approximated by applying equation (53) if θ w_A < r = |x − z_A| with some opening angle θ ≤ 1. Otherwise, the sum of the potentials obtained by applying the same algorithm to the daughter cells is used (or, if the cell is a tree leaf, from direct summation over all particles within the cell)."
+
+Here w_A is the cell's size (w_A ≥ max |x_a − z_A|) and z_A is the expansion centre. θ w_A < r is the same as w_A / r < θ, which is the s/d < θ form in the claim.
+> Springel 2005 (GADGET-2), Sect. 3.1: "In the approach of Barnes & Hut (1986, BH hereafter), a cubical root node is used to encompass the full mass distribution, which is repeatedly subdivided into eight daughter nodes of half the side-length each, until one ends up with 'leaf' nodes containing single particles. Forces are then obtained by 'walking' the tree, i.e. starting at the root node, a decision is made whether or not the multipole expansion of the node is considered to provide an accurate enough partial force (which will in general be the case for nodes that are small and distant enough)."
+
+Citations: Dehnen, W. & Read, J. I. 2011, "N-body simulations of gravitational dynamics", *Eur. Phys. J. Plus* 126, 55. DOI 10.1140/epjp/i2011-11055-3. arXiv:1105.1082. Springel, V. 2005, "The cosmological simulation code GADGET-2", *MNRAS* 364, 1105-1134. DOI 10.1111/j.1365-2966.2005.09655.x. arXiv:astro-ph/0505010.
+
+**Safe on-screen wording:** "Barnes-Hut tree (Barnes & Hut 1986, Nature 324, 446): a distant group of stars is treated as one body when (cell size) / (distance) < θ." Cite Dehnen & Read 2011 for the formula if a source line is shown.
+
+#### B4. Direct summation scales as N^2
+
+**Verdict: SUPPORTED**
+> Barnes & Hut 1986 abstract: "...direct integration, in which the computation needed increases as N^2..."
+>
+> Springel 2005, Sect. 2: "a complete force computation involves a double sum, resulting in a N^2-scaling of the computational cost. This reflects the long-range nature of gravity, where each particle interacts with every other particle"
+>
+> Dehnen & Read 2011: "...the cost of computing all N forces is O(N ln N)" [tree code] ... "This represents a substantial reduction from the O(N^2) for direct summation."
+
+**Safe narration:** "Adding up every pull between every pair of stars takes work that grows as N squared. A tree code groups distant stars together and gets close to N log N."
+
+---
+
+### C. Eternal inflation and bubble universes
+
+#### C5. Inflation never ends everywhere; bubbles nucleate in the false vacuum; our observable universe may sit inside one
+
+**Verdict: SUPPORTED** as a description of the theory.
+> Aguirre & Johnson 2011, abstract: "In the picture of eternal inflation as driven by a scalar potential with multiple minima, our observable universe resides inside one of many bubbles formed from transitions out of a false vacuum."
+>
+> Aguirre & Johnson 2011, Sect. I: "inflation proceeds forever and ceases only locally in 'pockets' or 'bubbles' that may become radiation- or matter-dominated. One of these could contain our observable universe."
+>
+> Feeney et al. 2011 (PRL), introduction: "In this scenario, known as eternal inflation ..., our observable universe resides inside a single bubble nucleated out of a false vacuum de Sitter space. The rate of bubble formation is outpaced by the accelerated expansion of the inflating false vacuum, and therefore inflation does not end everywhere."
+>
+> Guth 2007, Sect. 2.1: "Therefore, even though the false vacuum is decaying, it never disappears, and in fact the total volume of the false vacuum, once inflation starts, continues to grow exponentially with time, ad infinitum." ... "There is no standard name for these local universes, but they are often called bubble universes. I prefer, however, to call them pocket universes, to avoid the suggestion that they are round." ... "Most important of all is the simple statement that once inflation happens, it produces not just one universe, but an infinite number of universes."
+
+Citations:
+- Aguirre, A. & Johnson, M. C. 2011, "A status report on the observability of cosmic bubble collisions", *Rep. Prog. Phys.* 74, 074901. DOI 10.1088/0034-4885/74/7/074901. arXiv:0908.4105.
+- Feeney, S. M., Johnson, M. C., Mortlock, D. J. & Peiris, H. V. 2011, "First Observational Tests of Eternal Inflation", *Phys. Rev. Lett.* 107, 071301. DOI 10.1103/PhysRevLett.107.071301. arXiv:1012.1995.
+- Guth, A. H. 2007, "Eternal inflation and its implications", *J. Phys. A: Math. Theor.* 40, 6811-6826. DOI 10.1088/1751-8113/40/25/S25. arXiv:hep-th/0702178.
+- Coleman, S. & De Luccia, F. 1980, "Gravitational effects on and of vacuum decay", *Phys. Rev. D* 21 (12), 3305-3315. DOI 10.1103/PhysRevD.21.3305 (metadata from Crossref; paywalled; not on arXiv). Abstract (INSPIRE): "It is possible for a classical field theory to have two stable homogeneous ground states, only one of which is an absolute energy minimum. In the quantum version of the theory, the ground state of higher energy is a false vacuum, rendered unstable by barrier penetration. ... In this paper, we extend this theory to include the effects of gravitation." This supplies the bubble-nucleation (CDL) mechanism, not the eternal-inflation picture itself.
+
+Note: Guth points out that eternal *new* inflation produces irregular "pocket" universes, while bubbles from first-order (CDL) transitions are round. The bubble-collision papers use the false-vacuum (CDL) picture.
+
+**Safe narration:** "In one idea, called eternal inflation, inflation never stops everywhere. Bubbles keep forming in it, and our whole observable universe could sit inside one of them."
+
+#### C6. Bubbles can collide; bubble walls expand at (nearly) the speed of light
+
+**Verdict: SUPPORTED** (within the theory; "nearly the speed of light" is the safer phrase).
+> Aguirre & Johnson 2011, abstract: "These bubbles necessarily collide, upsetting the homogeneity and isotropy of our bubble interior, and possibly leading to detectable signatures in the observable portion of our bubble"
+>
+> Aguirre & Johnson 2011, Fig. 1 caption: "If in addition the initial radius of the bubble is small, it is possible to approximate the bubble wall as lying on the light cone"
+>
+> Aguirre & Johnson 2011, Sect. V A: "Assuming – as per the thin wall and small bubble approximations – that the bubbles spread as a null cone emanating from a pointlike nucleation..."
+>
+> Kleban, Levi & Sigurdson 2013, abstract: "These bubble universes will generically collide, and collisions with ours produce cosmic wakes that enter our Hubble volume, appear as unusually symmetric disks in the cosmic microwave background (CMB)..."
+>
+> Markkanen, Rajantie & Stopyra 2018, Sect. 4 (vacuum-decay bubbles generally): "the bubble nucleates with O(3,1) symmetry. This causes it to expand at near the speed of light" ... and Sect. 4.7: "it rapidly approaches the speed of light ... Thus, just as in flat space, the bubble expands outwards at the speed of light."
+
+Citations: Aguirre & Johnson 2011 (above). Kleban, M., Levi, T. S. & Sigurdson, K. 2013, "Observing the Multiverse with Cosmic Wakes", *Phys. Rev. D* 87, 041301. DOI 10.1103/PhysRevD.87.041301. arXiv:1109.3473. Markkanen, T., Rajantie, A. & Stopyra, S. 2018, "Cosmological Aspects of Higgs Vacuum Metastability", *Front. Astron. Space Sci.* 5, 40. DOI 10.3389/fspas.2018.00040. arXiv:1809.06923.
+
+**Safe narration:** "If this picture is right, bubbles can collide, and their walls race outward at nearly the speed of light."
+
+#### C7. Eternal inflation / the multiverse is speculative (not established)
+
+**Verdict: SUPPORTED**, with quotes from the same reviews.
+> Guth 2007, conclusions: "Although eternal inflation has fascinating consequences, our understanding of it remains incomplete." ... "It is the success of these predictions that justifies spending time on the more speculative aspects of inflationary cosmology."
+>
+> Guth 2007, abstract: "Although the infinity of pocket universes produced by eternal inflation are unobservable, ..."
+>
+> Feeney et al. 2011 (PRL): "Although there is ample motivation to consider the eternal inflation scenario, a concrete model (of, say, the string theory landscape) providing all of these details does not currently exist."
+>
+> Feeney et al. 2011 (PRL) abstract: "Data from the Planck satellite can be used to more definitively test the bubble collision hypothesis."
+>
+> Aguirre & Johnson 2011, Sect. I: "collisions between bubbles just might leave relic observable signatures, and hence provide – if we are very fortunate – a direct way to test the eternal inflation scenario."
+>
+> Aguirre & Johnson 2011, Sect. VI: "While requiring no small amount of good fortune, the detection of such a signal would truly be an epochal discovery." ... "While we currently do not have strong grounds either observationally or theoretically to single out a specific inflaton model..."
+>
+> NASA/IPAC U.S. Planck Data Center feature (22 Feb 2016): "But do multiple universes really exist? Scientists continue to debate the concept and come up with new theories." ... "The research is still in its infancy, and more testing is needed before any firm conclusions can be drawn."
+
+Extra citation: NASA/IPAC U.S. Planck Data Center, "Looking Within Our Universe For Something Beyond", 22 Feb 2016, https://planck.ipac.caltech.edu/news/planck16-001
+
+**Safe narration / on-screen tag:** "This is a hypothesis. Nobody has observed another universe."
+
+---
+
+### D. Observational searches
+
+#### D8. A past collision would leave an azimuthally symmetric, disc-shaped patch on the CMB
+
+**Verdict: SUPPORTED** as a prediction. Only the boundary of the patch is a ring; the predicted temperature modulation fills the disc inside it.
+> Feeney et al. 2011 (PRL): "Azimuthal symmetry: A collision between two bubbles leaves an imprint on the CMB sky that has azimuthal symmetry. This is a consequence of the SO(2,1) symmetry of the spacetime describing the collision of two vacuum bubbles. Causal boundary: The surface of last scattering can only be affected inside the future light cone of a collision event, which forms a ring on the CMB sky. The observed temperature of the CMB need not be continuous across this boundary."
+>
+> Feeney et al. 2011 (PRD), Sect. I: "From the spherical symmetry of the colliding bubbles, the collision possess azimuthal symmetry, and by causality must be confined to a disc on the sky."
+>
+> Feeney et al. 2011 (PRD), Fig. 2 caption: "The region affected by the collision appears as a disc of angular radius θ_crit on the CMB sky."
+>
+> Aguirre & Johnson 2011, Sect. III: "a single collision retains an azimuthal symmetry on the sky. ... appears as circle on the observer's sky, the disk interior to which represents the part of this surface possibly affected by the collision."
+
+Citations: Feeney et al. 2011 PRL (above). Feeney, S. M., Johnson, M. C., Mortlock, D. J. & Peiris, H. V. 2011, "First observational tests of eternal inflation: Analysis methods and WMAP 7-year results", *Phys. Rev. D* 84, 043507. DOI 10.1103/PhysRevD.84.043507. arXiv:1012.3667.
+
+**Safe narration:** "A collision in our distant past would show up as a round patch on the cosmic microwave background, a disc with a sharp edge."
+
+#### D9. WMAP 7-year result
+
+**Verdict: SUPPORTED.** No evidence was found; there is an upper limit on the expected number of detectable collisions.
+> Feeney et al. 2011 (PRL) abstract: "We conclude that the WMAP 7-year data do not warrant augmenting ΛCDM with bubble collisions, constraining the average number of detectable bubble collisions on the full sky N̄s < 1.6 at 68% CL."
+>
+> Feeney et al. 2011 (PRL) body: "Therefore, the WMAP 7-year data-set does not favor the bubble collision hypothesis for any value of N̄s; from the posterior we find N̄s < 1.6 at 68% probability."
+>
+> Same paper: "We can therefore rule out the presence of any large-angular-scale bubble collisions with values of {z0, zcrit} in the CHT exclusion region of Fig. 2."
+>
+> Same paper, nuance: "Interestingly, however, the Bayesian evidence ratios obtained for four of the features in the WMAP data are systematically larger than expected from false detections"
+>
+> Feeney et al. 2011 (PRD) abstract: "Our model selection results based on WMAP 7-year data do not warrant augmenting ΛCDM with bubble collisions."
+
+**Safe narration:** "Astronomers searched NASA's WMAP map for such discs. They found no convincing sign of one."
+On screen: "WMAP 7-yr: average number of detectable collisions < 1.6 (68% confidence). Feeney et al. 2011."
+
+#### D10. Later searches, and whether a Planck-data search was published
+
+**Verdict:** No published search of Planck data with the standard disc template (the Feeney/McEwen/Osborne type) was found, either peer-reviewed or by the Planck Collaboration. **One** peer-reviewed paper used Planck maps in a different (spectral) way and reported unconfirmed anomalies (Chary 2016). The latest peer-reviewed template searches use WMAP 7-year data (2013).
+
+1. **Feeney et al. 2013 (WMAP7, latest peer-reviewed template search, SUPPORTED):**
+   > "We conclude that the WMAP 7-year data do not favor the addition of either cosmic textures or bubble collisions to the standard cosmological model, and place robust constraints on the predicted number of such sources. The expected numbers of bubble collisions and cosmic textures on the CMB sky within our detection thresholds are constrained to be fewer than 4.0 and 5.2 at 95% confidence, respectively."
+
+   Feeney, S. M., Johnson, M. C., McEwen, J. D., Mortlock, D. J. & Peiris, H. V. 2013, "Hierarchical Bayesian detection algorithm for early-universe relics in the cosmic microwave background", *Phys. Rev. D* 88, 043012. DOI 10.1103/PhysRevD.88.043012. arXiv:1210.2725.
+2. **McEwen et al. 2012 (WMAP7 candidates):**
+   > "Applying our algorithm to WMAP 7-year observations, we detect eight new candidate bubble collision signatures for follow-up analysis."
+
+   These are candidates to follow up, not detections. McEwen, J. D., Feeney, S. M., Johnson, M. C. & Peiris, H. V. 2012, "Optimal filters for detecting cosmic bubble collisions", *Phys. Rev. D* 85, 103502. DOI 10.1103/PhysRevD.85.103502. arXiv:1202.2861.
+3. **Osborne, Senatore & Smith 2013 (WMAP7, arXiv preprint; no journal reference found):**
+   > "We find no detectable signal, and constrain the amplitude, a, of the initial curvature perturbation that would be generated by a collision: -4.66 × 10^-8 < a (sin θ_bubble)^(4/3) < 4.73 × 10^-8 [Mpc^-1] at 95% confidence"
+
+   arXiv:1305.1964, "Collisions with other Universes: the Optimal Analysis of the WMAP data". Companion methods paper: Osborne, Senatore & Smith 2013, "Optimal analysis of azimuthal features in the CMB", *JCAP* 10 (2013) 001, DOI 10.1088/1475-7516/2013/10/001, arXiv:1305.1970.
+4. **Chary 2016 (Planck maps, spectral method; claim unconfirmed):**
+   > "We analyze the spectral properties of masked, foreground-cleaned maps between 100 and 545 GHz constructed from the Planck dataset. Four distinct ~2-4° regions associated with CMB cold spots show anomalously strong 143 GHz emission but no correspondingly strong emission at either 100 or 217 GHz." ... "A plausible explanation is that the collision of our Universe with an alternate Universe whose baryon to photon ratio is a factor of ~4500 larger than ours, could produce enhanced Hydrogen Paschen-series emission at the epoch of recombination. Future spectral mapping and deeper observations at 100 and 217 GHz are needed to mitigate systematics arising from unknown Galactic foregrounds and to confirm this unusual hypothesis."
+
+   Chary, R.-R. 2016, "Spectral Variations of the Sky: Constraints on Alternate Universes", *ApJ* 817, 33. DOI 10.3847/0004-637X/817/1/33. arXiv:1510.00126. NASA/IPAC feature (above): "'Unusual claims like evidence for alternate universes require a very high burden of proof,' said Ranga-Ram Chary". The narration should NOT present this as evidence.
+5. **Planck Collaboration papers:** Planck 2015 XVI (isotropy and statistics) names a bubble collision as one proposed explanation of the Cold Spot. It does not run a search:
+   > "several non-standard physical mechanisms have been proposed as possible explanations. These include ... a cosmic bubble collision within the eternal inflation framework (Czech et al. 2010; Feeney et al. 2011; McEwen et al. 2012)" ... "Since the other scenarios lack additional evidence, the void hypothesis would seem to be the most plausible" ... "a specific pattern might be expected in a bubble collision scenario (Czech et al. 2010). Appropriate tests will be pursued in future work, once the large-scale polarization data are available."
+
+   Planck Collaboration 2016, "Planck 2015 results. XVI. Isotropy and statistics of the CMB", *A&A* 594, A16, DOI 10.1051/0004-6361/201526681, arXiv:1506.07135. Neither Planck 2018 VII (*A&A* 641, A7, DOI 10.1051/0004-6361/201935201, arXiv:1906.02552) nor Planck 2013 XXIII (arXiv:1303.5083) contains the word "bubble" (full-text search).
+6. **Forecasts, not searches:** Feeney, Elsner, Johnson & Peiris 2015, "Forecasting constraints from the cosmic microwave background on eternal inflation", *Phys. Rev. D* 92, 083515, DOI 10.1103/PhysRevD.92.083515, arXiv:1506.01716:
+   > "We can therefore view data from Planck as having the final word on bubble collisions in the CMB."
+
+   This is a forecast of what Planck *could* do, not a Planck result. The most recent related paper found is Cai, Zhang & Guan 2026, "Eternal inflation bubble collision signature on CMB remote dipole and quadrupole fields", *Phys. Rev. D* 113, 063545, DOI 10.1103/4c9h-tk5t, arXiv:2510.12134 (also a forecast).
+7. **Unverified grey literature:** a 2024 conference contribution (indico.global event 12919, contribution 113513, workshop "Standard Model and Beyond 2024") reportedly ran a blob-detection search on 2021 Planck CMB data and found no features meeting its thresholds, while flagging 14 features as possible candidates. **NOT VERIFIED**: the page was behind a bot check and I could not read it. It is not peer-reviewed. Do not use.
+
+**Safe narration:** "Searches of NASA's WMAP data found no convincing collision. ESA's sharper Planck maps have not turned one up either." The "not turned one up" claim rests on the absence of any published detection. Safer still: "No convincing evidence has been found so far."
+Do NOT say "Planck ruled it out".
+
+#### D11. Future tests (polarization etc.)
+
+**Verdict: SUPPORTED**
+> Czech et al. 2010, abstract: "We predict the polarization of cosmic microwave background (CMB) photons that results from a cosmic bubble collision. The polarization is purely E-mode, symmetric around the axis pointing towards the collision bubble, and has several salient features in its radial dependence that can help distinguish it from a more conventional explanation for unusually cold or hot features in the CMB sky."
+>
+> Feeney et al. 2015, abstract: "...we find that there is no improvement to be gained from future temperature data, that adding polarization improves detectability by approximately 30%, and that cosmic-variance-limited polarization data offer only marginal improvements over Planck."
+>
+> Cai, Zhang & Guan 2026, abstract: "We find that, for an CMB-S4-like and an LSST-like experiment, the RDF reconstruction can provide comparable constraining power as that from the primary CMB alone; and the RQF reconstruction can improve the constraining power by about an order of magnitude."
+
+Citation: Czech, B., Kleban, M., Larjo, K., Levi, T. S. & Sigurdson, K. 2010, "Polarizing bubble collisions", *JCAP* 12 (2010) 023. DOI 10.1088/1475-7516/2010/12/023. arXiv:1006.0832.
+
+**Safe narration:** "Future maps of the CMB's polarization, along with other new probes, could test the idea further."
+
+---
+
+### E. A collision in our future
+
+#### E12. A wall would arrive at nearly light speed, with no warning
+
+**Verdict: PARTLY.**
+- "Walls move at (nearly) the speed of light": SUPPORTED (C6; Markkanen et al. 2018).
+- "No warning": **NOT FOUND** as a statement in any peer-reviewed source I could read. It is a reasonable inference (a wall moving at almost c arrives almost together with any light that could announce it), but no source says it. The closest peer-reviewed wording:
+  > Markkanen, Rajantie & Stopyra 2018, Sect. 5.1: "This is because, once nucleated, a bubble of true vacuum expands at the speed of light and destroys everything in its way. If even a single bubble had nucleated at any time, anywhere in our past lightcone, it would have already hit us."
+  >
+  > Same paper, Sect. 6: "Once a bubble has formed, it expands at the speed of light, destroying everything in its way."
+
+  This is about **vacuum decay** (true-vacuum bubbles in our universe), not about collisions with other bubble universes.
+- Bubble *collisions* can be fatal in some models:
+  > Aguirre & Johnson 2011, Sect. I: "1. Fatal: collisions that either destroy, or prevent the formation of, physical observers to their future."
+- **Coleman & De Luccia 1980, the famous passage.** I could not read the original (APS, paywalled; the APS page returned 403). The text below is as reproduced verbatim, with attribution, in Banks, T. 2002, "Heretics of the False Vacuum: Gravitational Effects On and Of Vacuum Decay. 2.", arXiv:hep-th/0211160 (Introduction epigraph):
+  > "The possibility that we are living in a false vacuum has never been a cheering one to contemplate. Vacuum decay is the ultimate ecological catastrophe; in a new vacuum there are new constants of nature; after vacuum decay, not only is life as we know it impossible, so is chemistry as we know it. However, one could always draw stoic comfort from the possibility that perhaps in the course of time the new vacuum would sustain, if not life as we know it, at least some structures capable of knowing joy. This possibility has now been eliminated." (S. Coleman, F. De Luccia, 1980)
+
+  **What it covers:** it is about **vacuum decay** (our false vacuum decaying into a lower one), specifically the gravitational result that decay into a negative-energy vacuum collapses. It does **not** mention bubble collisions, wall speed, or warning. Some secondary sources write "in the new vacuum" rather than "in a new vacuum". Check the wording against the APS original before quoting it on screen.
+- **Coleman 1977**: Coleman, S. 1977, "Fate of the false vacuum: Semiclassical theory", *Phys. Rev. D* 15 (10), 2929-2936, DOI 10.1103/PhysRevD.15.2929. The INSPIRE abstract does not mention the wall speed, and the full text is paywalled, so its wording on the wall approaching light speed is **NOT FOUND / not verified**.
+- Turner, M. S. & Wilczek, F. 1982, "Is our vacuum metastable?", *Nature* 298, 633-634, DOI 10.1038/298633a0. The visible abstract has no "warning" wording; the full text is paywalled. **NOT VERIFIED.**
+
+**Safe narration (recommended):** "If such a wall ever reached us, it would be moving at nearly the speed of light, so we would get almost no warning. But this is pure speculation: there is no evidence that any such wall is coming."
+If vacuum decay is mentioned, keep it separate: "A related idea, vacuum decay, would also spread at nearly light speed (also speculative)."
+Do not attribute "no warning" to Coleman or to Coleman & De Luccia.
+
+---
+
+### F. Data credit: Planck 2018 SMICA CMB map
+
+#### F13. Citation, file location, acknowledgement
+
+**Citation: SUPPORTED**
+Planck Collaboration (Akrami, Y. et al.) 2020, "Planck 2018 results. IV. Diffuse component separation", *A&A* 641, A4. DOI 10.1051/0004-6361/201833881. arXiv:1807.06208. (Also listed on ESA's page: "Planck 2018 results. IV. Diffuse component separation Planck Collaboration 2020, A&A, 641, A4".)
+
+**Files (IRSA directory listing, checked 2026-11-14; byte counts from HTTP Content-Length; columns read from the FITS headers via a small byte-range request):**
+Directory: https://irsa.ipac.caltech.edu/data/Planck/release_3/all-sky-maps/maps/component-maps/cmb/
+
+| File | Listing size | Exact bytes | Contents (FITS header) |
+|---|---|---|---|
+| `COM_CMB_IQU-smica_2048_R3.00_full.fits` (standard SMICA, full mission) | 1.9G | 2,013,312,960 | 10 float32 columns: I_STOKES, Q_STOKES, U_STOKES, TMASK, PMASK, I/Q/U_STOKES_INP, TMASKINP, PMASKINP. HEALPix Nside 2048, NESTED, GALACTIC, K_CMB |
+| `COM_CMB_IQU-smica-nosz_2048_R3.00_full.fits` (SMICA SZ-free, **smallest full-mission SMICA file**) | 384M | 402,661,440 | 2 columns: I_STOKES, I_STOKES_INP (temperature only). Nside 2048, NESTED, GALACTIC, K_CMB |
+| `..._hm1/_hm2/_oe1/_oe2.fits` variants | 192M (nosz) / 576M (smica) | — | Half-mission / odd-even splits. Not recommended for a display map |
+
+- Direct URL (smallest suitable): https://irsa.ipac.caltech.edu/data/Planck/release_3/all-sky-maps/maps/component-maps/cmb/COM_CMB_IQU-smica-nosz_2048_R3.00_full.fits
+- Direct URL (standard SMICA): https://irsa.ipac.caltech.edu/data/Planck/release_3/all-sky-maps/maps/component-maps/cmb/COM_CMB_IQU-smica_2048_R3.00_full.fits
+- There is **no Nside 1024 SMICA map** in the PR3 CMB directory. Nside 1024 appears only for the SEVEM 70 GHz cleaned maps. PLA wiki: "All CMB products are provided at an approximate angular resolution of 5 arcmin FWHM, and HEALPix resolution N_side=2048."
+- What the SZ-free variant is (PLA wiki, "CMB maps"): "In addition, for SMICA, we also provide a CMB map from which Sunyaev-Zeldovich (SZ) sources have been projected out". Planck 2018 IV, Appendix D: "SZ-free CMB map: A CMB map free of SZ contamination is produced by a simple adaptation of Eq. (2)". If you use it, credit it as "SMICA (SZ-free)". For a visual it is practically the same as the standard SMICA temperature map, but the label should be accurate.
+- IRSA dataset DOI: 10.26131/IRSA558 ("Planck Public Data Release 3 Maps", publisher IPAC, author "Planck team"), https://doi.org/10.26131/IRSA558
+- ESA Planck Legacy Archive alternative: https://pla.esac.esa.int/pla/aio/product-action?MAP.MAP_ID=COM_CMB_IQU-smica_2048_R3.00_full.fits . This returned HTTP 503 at check time, so it is **not verified today**.
+- PLA wiki CMB maps page: https://wiki.cosmos.esa.int/planck-legacy-archive/index.php/CMB_maps
+
+**Acknowledgement text:**
+> ESA Planck publications page: "If you use any of these results for presentations, please acknowledge the corresponding paper, ESA/Planck, and the Planck Collaboration." (https://www.cosmos.esa.int/web/planck/publications)
+>
+> ESA image page for the Planck 2018 CMB map: "Credits ESA/Planck Collaboration Licence ESA Standard Licence" (https://www.esa.int/ESA_Multimedia/Images/2018/07/Planck_s_view_of_the_cosmic_microwave_background)
+>
+> IRSA acknowledgement page: "This research has made use of the NASA/IPAC Infrared Science Archive, which is funded by the National Aeronautics and Space Administration and operated by the California Institute of Technology." (https://irsa.ipac.caltech.edu/ack.html; IRSA asks for this "in addition to any further acknowledgments required by individual missions and data providers")
+>
+> The widely used sentence "Based on observations obtained with Planck (http://www.esa.int/Planck), an ESA science mission with instruments and contributions directly funded by ESA Member States, NASA, and Canada." was found verbatim in the acknowledgements of Clements, D. L. 2017, "An Introduction to the Planck Mission", arXiv:1707.09220. **I did not find it on an official ESA page in this check**, so treat it as standard practice rather than a documented requirement.
+
+**Suggested on-screen credit:** "Cosmic microwave background: ESA/Planck Collaboration. Planck 2018 SMICA map (Planck Collaboration 2020, A&A 641, A4), via NASA/IPAC IRSA." In the description/end card, add the IRSA sentence and the "Based on observations obtained with Planck..." sentence.
+
+---
+
+### G. Two narration numbers
+
+#### G-a. Andromeda is about 2.5 million light-years away (770 kpc)
+
+**Verdict: SUPPORTED**
+> NASA 2012 release: "The galaxy is now 2.5 million light-years away"
+>
+> van der Marel et al. 2012 (Paper II), Sect. 2: "Throughout this paper we adopt D = 770 ± 40 kpc (see references in vdMG08)."
+
+Citation for 770 kpc: van der Marel, R. P., Fardal, M., Besla, G. et al. 2012, "The M31 Velocity Vector. II. Radial Orbit Towards the Milky Way and Implied Local Group Mass", *ApJ* 753, 8. DOI 10.1088/0004-637X/753/1/8. arXiv:1205.6864. (Paper III, ApJ 753, 9, uses the same value and cites Paper II.)
+My calculation: 770 kpc x 3.26 ly/pc = 2.51 million ly, which is consistent.
+**Safe narration:** "about 2.5 million light-years away".
+
+#### G-b. About a 50% chance of a merger within the next 10 billion years
+
+**Verdict: SUPPORTED.** The abstract states the complement.
+> Sawala et al. 2025, abstract: "...uncertainties in the present positions, motions and masses of all galaxies leave room for drastically different outcomes and a probability of close to 50% that there will be no Milky Way–Andromeda merger during the next 10 billion years. Based on the best available data, the fate of our Galaxy is still completely open."
+>
+> Same paper, body: "About half of the systems reach the merger threshold within 10 Gyr, whereas the vast majority of the remaining systems do not approach closer than 200 kpc."
+
+Citation: Sawala, T., Delhomelle, J., Deason, A. J., Frenk, C. S., Häkkinen, J., Johansson, P. H., Keitaanranta, A., Rawlings, A. et al. 2025, "No certainty of a Milky Way–Andromeda collision", *Nature Astronomy* 9, 1206-1217. DOI 10.1038/s41550-025-02563-1. https://www.nature.com/articles/s41550-025-02563-1
+**Safe narration:** "Recent estimates give roughly a 50-50 chance that the Milky Way and Andromeda merge within the next 10 billion years."
+
+---
+
+### Claims that must be marked "speculative" on screen
+
+1. That eternal inflation is real, and that a multiverse of other "bubble" or "pocket" universes exists.
+2. That our observable universe sits inside one such bubble.
+3. That bubbles collide with ours, or that any collision happened in our past.
+4. Any disc drawn on the real Planck/WMAP map to show a collision imprint. Label it "illustration of a predicted signature; none has been found".
+5. Any "universe collision" visual or simulation. These are artistic, not N-body results of real physics.
+6. A future collision, or a bubble wall arriving at nearly light speed with "no warning". The "no warning" part is an inference with no source (see E12).
+7. Vacuum decay, if mentioned. It is a separate speculative scenario and must not be conflated with bubble collisions.
+8. The CMB Cold Spot, or Chary's 143 GHz patches, as collision evidence. These are unconfirmed proposals; Planck 2015 XVI calls the void explanation "the most plausible".
+9. The Andromeda merger outcome. It is a probability estimate (~50% within 10 Gyr), not a certainty. Mark it "estimate", not "speculative".
+
+These are established and need no tag: stars almost never collide in galaxy mergers; the scale numbers; N^2 direct summation and the Barnes-Hut tree method; the existence and features of the CMB maps; the WMAP null result (state it as a measured upper limit).

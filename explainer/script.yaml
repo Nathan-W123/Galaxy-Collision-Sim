@@ -1,0 +1,133 @@
+# Narration script: single source of truth for script.md, the scratch TTS and scene timing.
+#   python explainer/script_tool.py md      (timestamps at ~150 wpm)
+#   python explainer/script_tool.py tts     (scratch narration + measured timestamps)
+# Source keys (S1...) are listed in sources.md section 5.
+title: "What happens if our universe collided with another one?"
+wpm: 150
+lead_in: 0.6
+tail: 2.0
+sections:
+  - id: hook
+    title: "1. Hook"
+    note: "Engine footage of the two galaxies approaching (frames from the verified MW-M31 clip)."
+    lines:
+      - id: hook_q
+        say: "What happens if our universe collided with another one?"
+        screen: "What happens if our universe collided with another one?"
+        visual: "N-body footage: Milky Way and Andromeda approaching"
+        label: "N-body simulation"
+        pause_after: 0.8
+      - id: hook_start
+        say: "Let's start with a collision that might actually happen to us."
+        visual: "N-body footage continues"
+        pause_after: 0.9
+
+  - id: galaxies
+    title: "2. Galaxies"
+    gap_before: 0.3
+    lines:
+      - id: gal_andromeda
+        say: "Andromeda, two and a half million light-years away, is falling toward us."
+        screen: "Andromeda · 2.5 million light-years away"
+        visual: "N-body footage: approach"
+        sources: [S1, S2]
+      - id: gal_odds
+        say: "Whether they merge is roughly a coin flip. Here's one way it could go."
+        screen: "Chance of a merger within 10 billion years: about 50 % (estimate) · this run: one possible outcome"
+        visual: "N-body footage: approach, first passage begins"
+        label: "estimate"
+        sources: [S3, S4]
+        pause_after: 0.6
+      - id: gal_stars
+        say: "Here's the surprise: the stars almost never hit each other."
+        screen: "Stars almost never collide"
+        visual: "N-body footage: first passage in slow motion"
+        sources: [S1]
+      - id: gal_scale
+        say: "Make the Sun a grain of sand, and the nearest star is another grain about thirty kilometres away."
+        screen: "Sun → 1 mm grain of sand · nearest star → about 29 km away"
+        visual: "inset over the footage: grain of sand and a 29 km distance bar; footnote with NASA numbers"
+        sources: [S5, S6]
+        pause_after: 0.6
+      - id: gal_engine
+        say: "I wrote my own N-body engine for this. Every particle pulls on every other: N squared work."
+        screen: "N = 100,000 particles → N(N−1)/2 ≈ 5 billion pairs, every step"
+        visual: "Manim: dots with every pair joined; the line count explodes"
+        sources: [S7, S9]
+      - id: gal_tree
+        say: "The fix: treat a distant clump as one mass when its size over distance is small. That's about N log N."
+        screen: "s / d < θ   (θ = 0.6)  ·  N² → N log N  ·  Barnes & Hut 1986"
+        visual: "Manim: the engine's real octree from a simulation snapshot; one star's accepted cells highlighted; s and d drawn on one cell"
+        sources: [S7, S8]
+        pause_after: 0.6
+      - id: gal_tails
+        say: "Gravity does the damage: it flings out tidal tails, and the spirals settle into one smooth elliptical galaxy."
+        visual: "N-body footage: tails, second passage, coalescence, remnant (cut, not retimed)"
+        sources: [S4]
+        pause_after: 1.0
+
+  - id: universes
+    title: "3. Universes"
+    gap_before: 0.4
+    lines:
+      - id: uni_pivot
+        say: "But a universe isn't an object in space. You can't fly one into another."
+        screen: "A universe isn't an object in space."
+        visual: "Manim: the remnant galaxy shrinks to a dot; text"
+        pause_after: 0.6
+      - id: uni_eternal
+        say: "In one speculative idea, eternal inflation, space inflates forever and bubbles keep forming in it."
+        screen: "Eternal inflation (speculative)"
+        visual: "Manim: an expanding grid; bubbles appear in it"
+        label: "illustration · speculative"
+        sources: [S10, S11]
+      - id: uni_ours
+        say: "Our whole observable universe could sit inside one of those bubbles."
+        visual: "Manim: zoom into one bubble, marked 'our observable universe?'"
+        label: "illustration · speculative"
+        sources: [S11, S12]
+      - id: uni_collide
+        say: "Their walls grow at nearly light speed, so neighbouring bubbles can collide."
+        visual: "Toy bubble simulation: random nucleation, walls growing, collisions flash where walls meet"
+        label: "illustration (toy model)"
+        sources: [S11, S16]
+        pause_after: 0.8
+
+  - id: consequences
+    title: "4. What would happen"
+    gap_before: 0.3
+    lines:
+      - id: con_past
+        say: "A past collision would leave a disk-shaped mark on the cosmic microwave background, the oldest light we can see."
+        screen: "Planck 2018 map of the cosmic microwave background"
+        visual: "Real Planck SMICA map (Mollweide); a disk drawn on it"
+        label: "disk: illustration of a predicted signature"
+        sources: [S12, S13, S15]
+      - id: con_search
+        say: "Searches of the WMAP satellite's map found no convincing sign of one."
+        screen: "WMAP 7-year data: fewer than 1.6 detectable collisions expected (68 % confidence) · no convincing evidence so far"
+        visual: "Planck map; disk fades; result text"
+        sources: [S12, S14]
+        pause_after: 0.6
+      - id: con_future
+        say: "In our future? A wall would arrive at nearly light speed, with almost no warning. That part is pure speculation."
+        screen: "speculative"
+        visual: "Manim: a bright wall sweeping across the frame"
+        label: "illustration · speculative"
+        sources: [S11, S16]
+        pause_after: 0.8
+      - id: con_close
+        say: "We can watch Andromeda coming for billions of years. Another universe, we would never see coming."
+        visual: "split: N-body footage of the approach | empty dark frame"
+        sources: [S4]
+        pause_after: 1.2
+
+  - id: endcard
+    title: "5. End card"
+    lines:
+      - id: end_card
+        say: ""
+        hold: 4.0
+        screen: "Every frame of the galaxy collision was computed by my own N-body engine."
+        visual: "End card with credits: simulation (own Barnes-Hut code, 100,000 particles, initial conditions from van der Marel et al. 2012); CMB map: ESA/Planck Collaboration (Planck 2018), via NASA/IPAC IRSA; full sources in the description"
+        sources: [S4, S15]

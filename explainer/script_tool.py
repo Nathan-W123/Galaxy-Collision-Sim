@@ -3,8 +3,7 @@
     python explainer/script_tool.py md                 # script.md with ~150 wpm timestamps
     python explainer/script_tool.py tts [--voice V]    # scratch narration (piper, offline)
                                                        # -> output/audio/scratch_narration.wav
-                                                       #    + explainer/timing.json, and script.md
-                                                       #    timestamps from the measured audio
+                                                       #    + explainer/timing.json (scene timing)
 
 script.yaml layout::
 
@@ -126,6 +125,9 @@ def tts(doc, voice):
         for ln in sec["lines"]:
             out = AUDIO_DIR / f"line_{ln['id']}.wav"
             text = ln.get("tts", ln.get("say", ""))   # optional phonetic spelling for TTS
+            if not text.strip():                       # silent line (e.g. end card)
+                durs[ln["id"]] = float(ln.get("hold", 0.0))
+                continue
             subprocess.run([sys.executable, "-m", "piper", "-m", str(model), "-f", str(out),
                             "--", text], check=True, capture_output=True)
             durs[ln["id"]] = wav_duration(out) + float(ln.get("hold", 0.0))
@@ -156,7 +158,6 @@ def main(argv=None):
         write_md(doc, rows, total, f"estimated at {doc.get('wpm', 150)} words per minute")
     else:
         rows, total, track = tts(doc, a.voice)
-        write_md(doc, rows, total, "measured from the scratch narration")
         TIMING.write_text(json.dumps({"total": total, "lines": rows}, indent=2))
         print("wrote", track, "and", TIMING)
     print(f"total {fmt(total)}")

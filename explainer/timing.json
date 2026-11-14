@@ -1,0 +1,113 @@
+{
+  "total": 100.86643990929704,
+  "lines": [
+    {
+      "section": "hook",
+      "id": "hook_q",
+      "start": 0.6,
+      "end": 3.34
+    },
+    {
+      "section": "hook",
+      "id": "hook_start",
+      "start": 4.14,
+      "end": 7.426
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_andromeda",
+      "start": 8.626,
+      "end": 13.095
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_odds",
+      "start": 13.495,
+      "end": 17.42
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_stars",
+      "start": 18.02,
+      "end": 21.282
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_scale",
+      "start": 21.682,
+      "end": 27.15
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_engine",
+      "start": 27.75,
+      "end": 33.683
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_tree",
+      "start": 34.083,
+      "end": 39.783
+    },
+    {
+      "section": "galaxies",
+      "id": "gal_tails",
+      "start": 40.383,
+      "end": 47.024
+    },
+    {
+      "section": "universes",
+      "id": "uni_pivot",
+      "start": 48.424,
+      "end": 52.941
+    },
+    {
+      "section": "universes",
+      "id": "uni_eternal",
+      "start": 53.541,
+      "end": 59.206
+    },
+    {
+      "section": "universes",
+      "id": "uni_ours",
+      "start": 59.606,
+      "end": 63.531
+    },
+    {
+      "section": "universes",
+      "id": "uni_collide",
+      "start": 63.931,
+      "end": 68.064
+    },
+    {
+      "section": "consequences",
+      "id": "con_past",
+      "start": 69.164,
+      "end": 75.549
+    },
+    {
+      "section": "consequences",
+      "id": "con_search",
+      "start": 75.949,
+      "end": 80.013
+    },
+    {
+      "section": "consequences",
+      "id": "con_future",
+      "start": 80.613,
+      "end": 87.335
+    },
+    {
+      "section": "consequences",
+      "id": "con_close",
+      "start": 88.135,
+      "end": 93.266
+    },
+    {
+      "section": "endcard",
+      "id": "end_card",
+      "start": 94.466,
+      "end": 98.466
+    }
+  ]
+}

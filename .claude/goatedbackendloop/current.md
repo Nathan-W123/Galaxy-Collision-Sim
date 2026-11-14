@@ -9,8 +9,12 @@ Request: Phase 3 - explainer (Manim CE) per the brief; step 1 = fact-checked scr
 - Tradeoff: real Planck map needs healpy + a large download; synthetic would be simpler but less honest/striking.
 - Success: every on-screen claim traced to sources.md; user approves script; preview passes render.verify on each sim segment.
 ## Progress
-- [ ] research (agent) -> sources.md additions
-- [ ] toolchain: texlive, dvisvgm, manim 0.22.1, piper-tts + voice, healpy, Planck SMICA map
-- [ ] script.md draft -> user approval
+- [x] research (agent) -> sources.md section 5 (S1-S16 + full record); corrections: no Planck disc search published; "no warning" unsourced -> "almost no warning", speculative; don't call the merger certain
+- [x] toolchain: texlive, dvisvgm, manim 0.22.1, piper-tts (en_US-lessac-medium), healpy; Planck 2018 SMICA map downloaded (2.0 GB, resumed after reset)
+- [x] toy bubble model (explainer/bubbles.py) + tests; script tooling (yaml -> script.md / TTS / timing.json)
+- [x] script draft: 249 words, 1:58.5 at 150 wpm, 1:40.9 scratch TTS
+- [ ] user approval of wording (D-07)
+- [ ] scenes, preview, Checkpoint 3
 ## Observations
+- 2026-11-14 first draft ran 2:10 at 150 wpm although the TTS read it in 1:47; budgeting by the brief's wpm (not the faster TTS) caught the overrun before the user recorded anything
 ## Handoff
