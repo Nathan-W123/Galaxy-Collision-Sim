@@ -34,3 +34,15 @@
 - Alternatives considered: 50/10/40, 70/5/25, 200k at dt = 2 Myr.
 - Source: recommended and approved
 - Revisit if: disks look too thick at the encounter.
+### D-07 · Script approval stop before building scenes (2026-11-14)
+- Decision: write and fact-check script.md, stop for the user's approval, then build Manim scenes.
+- Why: text is cheap to change before animation, expensive after (cf. L-01).
+- Alternatives considered: straight to the Checkpoint 3 preview.
+- Source: stated by user
+- Revisit if: -
+### D-08 · CMB scene uses the real Planck 2018 map (2026-11-14)
+- Decision: Planck 2018 SMICA CMB map (public, via IRSA) in Mollweide; the bubble-collision disk drawn on top and labelled "illustration".
+- Why: real data is more honest and striking; only the disk is illustrative.
+- Alternatives considered: synthetic Gaussian sky (whole scene "illustration").
+- Source: stated by user
+- Revisit if: download/licence problems.

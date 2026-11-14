@@ -6,3 +6,11 @@ scipy==1.18.1
 PyYAML==6.0.3
 pillow==13.0.0
 pytest==9.2.0
+# Phase 3 (explainer): Manim Community Edition, HEALPix sky maps, offline scratch TTS.
+# System packages (apt): texlive-latex-base texlive-latex-recommended texlive-latex-extra
+#   texlive-fonts-recommended texlive-science cm-super dvisvgm libpango1.0-dev pkg-config ffmpeg
+manim==0.22.1
+ManimPango==0.7.1
+pycairo==1.29.2
+healpy==1.20.1
+piper-tts==1.8.0
